@@ -1,0 +1,182 @@
+<!doctype html><html lang="en"><head><meta charSet="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Granular Rendering with Custom Elements | Engineering at MAD – Digital Product Studio</title><meta name="description" content="Modern frontend rendering best-practices come at a cost. Can we do better? Let's look at how we used Preact together with Custom Elements to achieve more granular rendering on the new MAD website." /><meta property="og:url" content="https://www.mad.ac/" /><meta property="og:title" content="Granular Rendering with Custom Elements | Engineering at MAD – Digital Product Studio" /><meta property="og:description" content="Modern frontend rendering best-practices come at a cost. Can we do better? Let's look at how we used Preact together with Custom Elements to achieve more granular rendering on the new MAD website." /><meta property="og:image" content="https://mad.ac/images/engineering/granular-rendering-custom-elements/mad-custom-elements-og.jpg" /><meta property="og:type" content="website" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@createdbymad" /><meta name="twitter:creator" content="@createdbymad" /><link rel="icon" href="../../favicon.ico" /><link rel="icon" href="../../favicon.svg" type="image/svg+xml" /><link rel="apple-touch-icon" href="../../apple-touch-icon.png" /><link rel="manifest" href="../../manifest.json" /><link rel="alternate" href="../feed.xml" type="application/rss+xml" title="MAD Engineering Blog Feed (RSS)" /><link rel="alternate" href="../feed.json" type="application/json" title="MAD Engineering Blog Feed (JSON)" /><link rel="preload" href="../../fonts/GT-MaruBeta-Bold.woff2" as="font" type="font/woff2" crossOrigin="true" /><link rel="preload" href="../../fonts/GT-MaruBeta-Regular.woff2" as="font" type="font/woff2" crossOrigin="true" /><link rel="stylesheet" href="../../styles/main%EF%B9%96v=431300964a77750d3c621bffa45c154cb1e8582c.css" /><script src="https://cdn.usefathom.com/script.js" data-site="ZUYODAUJ" defer></script></head><body class="blog font-serif"><header class="blog-header"><p class="blog-intro">Welcome to <a href="../../engineering.html">Engineering at MAD</a>. A space for creative tech, with words directly from our engineers.</p><nav class="blog-nav"><div class="blog-nav-home"><a href="../../index.html">mad.ac</a></div><div class="blog-nav-feeds"><a href="../feed.xml">Atom</a><a href="../feed.json">JSON</a></div></nav></header><main class="blog-content"><article class="post copy flow"><h1 class="post-title">Granular Rendering with Custom Elements</h1><p class="post-byline"><span class="post-date">02/03/2021</span><span class="post-author">By <a href="../../team/nikolai.html">Nikolai Sivertsen</a></span></p><div class="post-content copy flow"><p>Modern frontend rendering best-practices come at a cost. Here is a sketch of a typical &quot;isomorphic&quot; rendering setup with <a href="https://preactjs.com/">Preact</a>. We render our <code>&lt;App /&gt;</code> component on the server and pass the generated HTML along with the data used to generate it to the client.</p>
+<pre><code class="language-jsx"><span class="token comment">// server.jsx</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> h <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"preact"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> render <span class="token keyword">from</span> <span class="token string">"preact-render-to-string"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> express <span class="token keyword">from</span> <span class="token string">"express"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> App <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./app"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> server <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+server<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token comment">/* ...data loaded from somewhere... */</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> html <span class="token operator">=</span> <span class="token function">render</span><span class="token punctuation">(</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">App</span></span> <span class="token spread"><span class="token punctuation">{</span><span class="token punctuation">...</span><span class="token attr-value">props</span><span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;!DOCTYPE html>
+    &lt;html>
+      &lt;body>
+        &lt;div id="root">
+          </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>html<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">
+        &lt;/div>
+        &lt;script id="__DATA__" type="application/json">
+          </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>props<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">
+        &lt;/script>
+      &lt;/body>
+    &lt;/html>
+  </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+server<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">8080</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>And then, on the client, we use that data to &quot;hydrate&quot; our VDOM tree.</p>
+<pre><code class="language-jsx"><span class="token comment">// client.jsx</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> h<span class="token punctuation">,</span> hydrate <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"preact"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> App <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./app"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>__DATA__<span class="token punctuation">.</span>textContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">hydrate</span><span class="token punctuation">(</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">App</span></span> <span class="token spread"><span class="token punctuation">{</span><span class="token punctuation">...</span><span class="token attr-value">props</span><span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>This architecture is really nice, as it is simple to think about and allows us to share most of our code between client and server. Popular frameworks like <a href="https://nextjs.org/">Next.js</a> and <a href="https://www.gatsbyjs.com/">Gatsby</a> implement it.</p>
+<p>But herein lies the cost: We&#39;re sending all content to the client twice, once as HTML and then again as JSON. Furthermore, our page only becomes interactive when we&#39;re done <a href="https://reactjs.org/docs/react-dom.html#hydrate">hydrating</a> it, and hydrating blocks the main thread—possibly for a while if our app is big or the user doesn&#39;t have a powerful CPU. Worse, in the general case, large parts of the tree that we&#39;re hydrating are static and don&#39;t update in response to state changes, meaning we wasted cycles hydrating them in the first place. <a href="https://developers.google.com/web/updates/2019/02/rendering-on-the-web">&quot;Rendering on the Web&quot;</a> is a good discussion of the tradeoffs involved.</p>
+<p><a href="https://twitter.com/_developit">Jason Miller</a> outlines a possible alternative in <a href="https://jasonformat.com/islands-architecture/">&quot;Islands Architecture&quot;</a>:</p>
+<blockquote>
+<p>The general idea of an “Islands” architecture is deceptively simple: render HTML pages on the server, and inject placeholders or slots around highly dynamic regions. These placeholders/slots contain the server-rendered HTML output from their corresponding widget. They denote regions that can then be &quot;hydrated&quot; on the client into small self-contained widgets, reusing their server-rendered initial HTML.</p>
+</blockquote>
+<p>I want to write about one way to implement this architecture using Preact and <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements">Custom Elements</a> that we&#39;re using on the new MAD website. Custom Elements and <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components">Web Components</a>, the collection of standards that Custom Elements are a part of, together with Shadow DOM and HTML templates, have received their share of <a href="https://dev.to/richharris/why-i-don-t-use-web-components-2cia">criticism</a> for being an inadequate replacement for modern frontend frameworks such as React or Vue.</p>
+<p>In my mind, their strength lies not in replacing modern frameworks, but in augmenting them. Frameworks give us a component model and rendering, while Custom Elements allow us to <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#using_the_lifecycle_callbacks">hook into</a> the browser&#39;s standard element lifecycle using <code>connectedCallback()</code> and <code>disconnectedCallback()</code>. This allows us to run code in response to a piece of HTML showing up or being removed from the page—exactly what we need for granular rendering.</p>
+<p>Let&#39;s walk through some examples of how we use this pattern on the new MAD website.</p>
+<p>The simplest example is one where we don&#39;t use any Preact at all on the client: the lazy-image element. On the server, we wrap our <code>&lt;img&gt;</code> in a <code>&lt;lazy-image&gt;</code>, pass a transparent placeholder as the <code>src</code>, with the real <code>src</code> and <code>srcset</code> tucked away in dataset attributes.</p>
+<pre><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lazy-image</span><span class="token punctuation">></span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span>
+    <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/media/1024/images/example.jpg<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-srcset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>
+      /media/512/images/example.jpg 512w,
+      /media/1024/images/example.jpg 1024w,
+      /media/2048/images/example.jpg 2048w,
+      /media/3072/images/example.jpg 3072w,
+      /media/4096/images/example.jpg 4096w
+    <span class="token punctuation">"</span></span>
+    <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>An example image<span class="token punctuation">"</span></span>
+  <span class="token punctuation">/></span></span><span class="token plain-text">
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>lazy-image</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>And then, on the client, we attach an <code>IntersectionObserver</code> and switch in the real image when the element comes near the viewport.</p>
+<pre><code class="language-jsx"><span class="token keyword">const</span> observer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IntersectionObserver</span><span class="token punctuation">(</span>
+  <span class="token punctuation">(</span><span class="token parameter">entries</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> entry <span class="token keyword">of</span> entries<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>entry<span class="token punctuation">.</span>isIntersecting<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        observer<span class="token punctuation">.</span><span class="token function">unobserve</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span>target<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        entry<span class="token punctuation">.</span>target<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span> rootMargin<span class="token operator">:</span> <span class="token string">"200px"</span> <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">LazyImage</span> <span class="token keyword">extends</span> <span class="token class-name">HTMLElement</span> <span class="token punctuation">{</span>
+  <span class="token function">connectedCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    observer<span class="token punctuation">.</span><span class="token function">observe</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">disconnectedCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    observer<span class="token punctuation">.</span><span class="token function">unobserve</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">load</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> image <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"img"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>image<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>image<span class="token punctuation">.</span>dataset<span class="token punctuation">.</span>srcset<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        image<span class="token punctuation">.</span>srcset <span class="token operator">=</span> image<span class="token punctuation">.</span>dataset<span class="token punctuation">.</span>srcset<span class="token punctuation">;</span>
+        <span class="token keyword">delete</span> image<span class="token punctuation">.</span>dataset<span class="token punctuation">.</span>srcset<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>image<span class="token punctuation">.</span>dataset<span class="token punctuation">.</span>src<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        image<span class="token punctuation">.</span>src <span class="token operator">=</span> image<span class="token punctuation">.</span>dataset<span class="token punctuation">.</span>src<span class="token punctuation">;</span>
+        <span class="token keyword">delete</span> image<span class="token punctuation">.</span>dataset<span class="token punctuation">.</span>src<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+customElements<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">"lazy-image"</span><span class="token punctuation">,</span> LazyImage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>As you can see, this level of interactivity doesn&#39;t require hydrating a whole VDOM tree. We have a similar element for lazily loading videos and starting playback when they&#39;re in the viewport.</p>
+<p>This simple example shows off one of the best things about this approach: the HTML is in control of where elements are instantiated, rather than the other way around, where a piece of JavaScript uses <code>querySelectorAll</code> or <code>MutationObserver</code> to find chunks of HTML to make interactive.</p>
+<p>Our favourite element of this kind is <code>&lt;draggable-element&gt;</code>, which you can wrap around any element to make it draggable, and which you can see in its full glory on the home page.</p>
+<pre><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>draggable-element</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>applet-map<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MapApplet</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>draggable-element</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>Let&#39;s look at an example that uses Preact on the client next, specifically the &quot;Notes&quot; applet on the home page.</p>
+<p>On the server we include the data that the component needs for its initial render in a <code>&lt;script type=&quot;application/json&quot;&gt;</code> tag.</p>
+<pre><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mad-notes</span><span class="token punctuation">></span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">NotesApplet</span></span> <span class="token spread"><span class="token punctuation">{</span><span class="token punctuation">...</span><span class="token attr-value">props</span><span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>application/json<span class="token punctuation">"</span></span> <span class="token attr-name">dangerouslySetInnerHTML</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> __html<span class="token operator">:</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>props<span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mad-notes</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>And on the client we hydrate the component with that data.</p>
+<pre><code class="language-jsx"><span class="token keyword">import</span> <span class="token punctuation">{</span> h<span class="token punctuation">,</span> hydrate <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"preact"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> NotesApplet <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"../applets/notes"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">NotesElement</span> <span class="token keyword">extends</span> <span class="token class-name">HTMLElement</span> <span class="token punctuation">{</span>
+  <span class="token function">connectedCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"script"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>textContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">hydrate</span><span class="token punctuation">(</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">NotesApplet</span></span> <span class="token spread"><span class="token punctuation">{</span><span class="token punctuation">...</span><span class="token attr-value">props</span><span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+customElements<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">"mad-notes"</span><span class="token punctuation">,</span> NotesElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>And voila, our <code>&lt;NotesApplet /&gt;</code> is now interactive.</p>
+<p>This pattern becomes quite repetitive when you have more than a couple of elements, but you could wrap this up in a helper or use a library like <a href="https://github.com/preactjs/preact-custom-element">preact-custom-element</a>, which also adds a few more niceties, such as observing element attributes and syncing them with Preact component props, and optionally rendering into shadow DOM.</p>
+<pre><code class="language-jsx"><span class="token keyword">import</span> register <span class="token keyword">from</span> <span class="token string">"preact-custom-element"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> RemindersApplet <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"../applets/reminders"</span><span class="token punctuation">;</span>
+
+<span class="token function">register</span><span class="token punctuation">(</span>RemindersApplet<span class="token punctuation">,</span> <span class="token string">"mad-reminders"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>We can do better, though.</p>
+<p>While this approach allows us to only hydrate portions of the page which should be interactive, it hydrates all of them at the same time, on page load. Meanwhile, most elements are probably off-screen, and we want to prioritise those that the user will likely interact with first.</p>
+<p>We can use an <code>IntersectionObserver</code> and a dynamic import to fetch the module and hydrate the component when its wrapping element comes close to the viewport.</p>
+<pre><code class="language-jsx"><span class="token keyword">import</span> <span class="token punctuation">{</span> h<span class="token punctuation">,</span> hydrate <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"preact"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> observer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IntersectionObserver</span><span class="token punctuation">(</span>
+  <span class="token punctuation">(</span><span class="token parameter">entries</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> entry <span class="token keyword">of</span> entries<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>entry<span class="token punctuation">.</span>isIntersecting<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        oberver<span class="token punctuation">.</span><span class="token function">unobserve</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span>target<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        entry<span class="token punctuation">.</span>target<span class="token punctuation">.</span><span class="token function">hydrate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span> rootMargin<span class="token operator">:</span> <span class="token string">"200px"</span> <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">NotesElement</span> <span class="token keyword">extends</span> <span class="token class-name">HTMLElement</span> <span class="token punctuation">{</span>
+  <span class="token function">connectedCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    observer<span class="token punctuation">.</span><span class="token function">observe</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">disconnectedCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    observer<span class="token punctuation">.</span><span class="token function">unobserve</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">async</span> <span class="token function">hydrate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> NotesApplet <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">"../applets/notes"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"script"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>textContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">hydrate</span><span class="token punctuation">(</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">NotesApplet</span></span> <span class="token spread"><span class="token punctuation">{</span><span class="token punctuation">...</span><span class="token attr-value">props</span><span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+customElements<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">"mad-notes"</span><span class="token punctuation">,</span> NotesElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Now, we only need to load a minimal amount of JavaScript in the initial bundle, and can then load the rest of it and perform hydration when it makes sense to. Depending on your situation, you could think of other approaches for triggering hydration, such as scroll listeners or <code>mouseover</code> or <code>touchstart</code> events.</p>
+<p>You could also abstract this behaviour into a general-purpose element that can hydrate any of your Preact components, or pair this approach with a Service Worker that pre-emptively loads the code for components that are likely to be needed soon after page load, so that they&#39;re already available when the time comes to hydrate them.</p>
+<p>And that&#39;s it! Please reach out on <a href="https://twitter.com/nonscio">Twitter</a> if you have questions or suggestions. Also, we&#39;re hiring! Check out our <a href="../../careers.html">careers</a> page for open positions.</p>
+<br>
+
+<hr>
+<p>Thanks to <a href="https://twitter.com/gryzzly">Misha Reyzlin</a> and <a href="https://twitter.com/thabisegoe">Rethabile Segoe</a> for providing valuable feedback on early drafts of this article.</p>
+<hr>
+</div><footer class="post-footer"><img class="post-footer-image" src="../../images/team/nikolai.png" alt width="120" height="120" /><p>By <a href="../../team/nikolai.html">Nikolai Sivertsen</a></p><p>02/03/2021</p></footer></article></main></body></html>

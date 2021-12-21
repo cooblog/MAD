@@ -1,0 +1,1107 @@
+<?xml version="1.0" encoding="utf-8"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+			<channel>
+				<title>MAD Engineering Blog</title>
+				<link>https://mad.ac/engineering</link>
+				<description>A RSS news feed containing the latest MAD Engineering articles.</description>
+				<language>en-us</language>
+				<copyright>Contents and compilations published on these websites by the providers are subject to German copyright laws. Reproduction, editing, distribution as well as the use of any kind outside the scope of the copyright law require a written permission of the author or originator. Downloads and copies of these websites are permitted for private use only.
+	The commercial use of our contents without permission of the originator is prohibited. Copyright laws of third parties are respected as long as the contents on these websites do not originate from the provider. Contributions of third parties on this site are indicated as such. However, if you notice any violations of copyright law, please inform us. Such contents will be removed immediately.</copyright>
+				<atom:link href="https://www.mad.ac/feed.xml" rel="self" type="application/rss+xml"/>
+			<item>
+				<title>May: Finishing Touches</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-13</link>
+				<pubDate>Tue, 29 Jun 2021 10:45:02 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-5&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-6&quot;&gt;Week 6: Blended Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-7&quot;&gt;Week 7: Restructuring the Project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-8&quot;&gt;Week 8: Drawing Board&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-9&quot;&gt;Week 9: Arranging Furniture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-10&quot;&gt;Week 10: Materials and Classes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-11&quot;&gt;Week 11: Different Room Types&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-12&quot;&gt;Week 12: Planning for the Final Weeks&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the beginning of May, we had a functioning Flask app that was able to take a Twitter username and generate a custom 3D room as a response. However, we wanted to take the app further by giving more thought to some details. I’ll focus on three things: adding generative sculptures, improving the performance on the Flask side and designing a start and loading page.&lt;/p&gt;
+&lt;p&gt;Initially, I had three different 3D models that I was using as sculptures in the room. These were by &lt;a href=&quot;https://sketchfab.com/3d-models/head-of-david-but-with-hay-585af747e89f4e78afda322c487a5059&quot;&gt;doubletwisted&lt;/a&gt;, &lt;a href=&quot;https://sketchfab.com/3d-models/deformed-ball-4e92e4edb588403d8f5955ad88d2a798&quot;&gt;Aiekick&lt;/a&gt; and &lt;a href=&quot;https://sketchfab.com/3d-models/assignment-1-abstract-sculpture-7b7ba579c6d24d7d9f924e9e7d89c299&quot;&gt;justindesigner&lt;/a&gt;. However, &lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt; and I thought that sculptures could be a natural way to introduce more generative elements in the room. We studied some shape grammar experiments by &lt;a href=&quot;https://observablehq.com/@mayagao/basic-shape-grammar-designs&quot;&gt;Maya Gao&lt;/a&gt; and became interested in them. Nikolai also suggested testing L-systems to create organic shapes and provided me with some code to build on.&lt;/p&gt;
+&lt;p&gt;I ended up switching between three different sculpture types in the room: one with randomly placed boxes (in picture), one blob-like made with &lt;a href=&quot;https://threejs.org/docs/#api/en/geometries/TorusGeometry&quot;&gt;TorusGeometries&lt;/a&gt; and a L-system and one that is deforming one big TorusGeometry.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-13/box_sculpture.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-13/box_sculpture.png 512w,/media/1024/images/engineering/veera-intern-blog-week-13/box_sculpture.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-13/box_sculpture.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-13/box_sculpture.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-13/box_sculpture.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Box sculpture&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Code for the BoxSculpture class as an example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;export class BoxSculpture {
+  constructor({
+    dim = 20,
+    width = 4,
+    height = 4,
+    depth = 4,
+    numOf = 600,
+  } = {}) {
+
+    function makeCube(dim) {
+      let cube = [];
+      for (let x = 0; x &amp;lt; dim; x++) {
+        cube[x] = [];
+        for (let y = 0; y &amp;lt; dim; y++) {
+          cube[x][y] = [];
+          for (let z = 0; z &amp;lt; dim; z++) {
+            cube[x][y][z] = 0;
+          }
+        }
+      }
+      return cube;
+    }
+
+    function randomPoint(dim) {
+      return Math.floor(Math.random() * dim);
+    }
+
+    function randomPosition(dim) {
+      return [randomPoint(dim), randomPoint(dim), randomPoint(dim)];
+    }
+
+    function hasSpace(cube, [x, y, z]) {
+      for (let i = x - 0.5 * width; i &amp;lt;= x + 0.5 * width; i++) {
+        if (i &amp;lt; 0 || i &amp;gt; cube.length - 1) {
+          return false;
+        }
+        for (let j = y - 0.5 * height; j &amp;lt;= y + 0.5 * height; j++) {
+          if (j &amp;lt; 0 || j &amp;gt; cube.length - 1) {
+            return false;
+          }
+          for (let k = z - 0.5 * depth; k &amp;lt;= z + 0.5 * depth; k++) {
+            if (k &amp;lt; 0 || k &amp;gt; cube.length - 1) {
+              return false;
+            }
+            if (cube[i][j][k] === 1) {
+              return false;
+            }
+          }
+        }
+      }
+      return true;
+    }
+
+    let bound = makeCube(dim);
+    const sculpt = new THREE.Group();
+
+    const standHeight = 20;
+    const standGeometry = new THREE.BoxGeometry(18, standHeight, 18, 30, 30);
+    const stand = new THREE.Mesh(standGeometry, standDarkMaterial);
+    stand.receiveShadow = true;
+    stand.castShadow = true;
+    stand.position.y = standHeight / 2;
+
+    for (let i = 0; i &amp;lt; numOf; i++) {
+      let geometry = new THREE.BoxGeometry(
+        (width / dim) * (Math.floor(Math.random() * 3) + 1),
+        (height / dim) * (Math.floor(Math.random() * 3) + 1),
+        (depth / dim) * (Math.floor(Math.random() * 3) + 1),
+        10,
+        10
+      );
+      // these are blocks that we add to the group and finally draw
+      const block = new THREE.Mesh(geometry, sharpMaterial);
+      // individual random position with each round of the loop
+      let position = randomPosition(dim);
+      if (bound[position[0]][position[1]][position[2]] === 0) {
+        block.position.x = position[0] * (width / dim) - width / 2;
+        block.position.y =
+          position[1] * (height / dim) + standHeight + 0.5 * (height / dim);
+        block.position.z = position[2] * (depth / dim) - depth / 2;
+        block.castShadow = true;
+        block.receiveShadow = true;
+        // add that small cube to the group
+        sculpt.add(block);
+        bound[position[0]][position[1]][position[2]] = 1;
+      }
+    }
+
+    sculpt.add(stand);
+    // this is the result that class returns
+    return sculpt;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In the main code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const sculpture = new BoxSculpture({
+  // value coming from data
+  dim: resizeBoxes,
+  width: 26,
+  height: 36,
+  depth: 26,
+  numOf: 30,
+});
+
+sculpture.position.x = 20;
+sculpture.position.y = 0;
+sculpture.position.z = -20;
+scene.add(sculpture);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Virtually every user gets a unique sculpture because of randomness and differencies in data, so it was definitely worth it to spend some time studying generative rules.&lt;/p&gt;
+&lt;h2 id=&quot;minimalist-design&quot;&gt;Minimalist Design&lt;/h2&gt;
+&lt;p&gt;On the Python side, we wanted to improve performance. One important change was to get rid of a text file called &lt;code&gt;textMass.txt&lt;/code&gt;. I had previously appended all the user’s tweets to that one file in to make it easier to inspect during prototyping. However, this had meant opening the text file, appending to it and closing it before moving on to calculations. A much more straightforward solution is just using a string instead:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;textMass = &amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then cleaning the tweet and adding it to a long string in for loop:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;cleanedText = cleanTxt(tweet.full_text)
+textMass += cleanedText
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And outside the for loop:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;// ready for calculating NLP values
+whole_text_sample = TextBlob(textMass)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I also learned how great &lt;a href=&quot;https://www.w3schools.com/python/python_sets.asp&quot;&gt;sets&lt;/a&gt; can be for NLP calculations. Since they ignore duplicate values, they can easily be used to store unique words of the text corpus:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;for sentence in whole_text_sample.sentences:
+    for word in sentence.tags:
+        uniqueWords.add(word[0])
+        # checking tags that indicate verbs
+        if word[1] == &amp;#39;JJ&amp;#39; or word[1]==&amp;#39;JJR&amp;#39; or word[1]==&amp;#39;JJS&amp;#39;:
+            uniqueAdjectives.add(word[0])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, it was time to design a minimal start page and add a loading page. I created a simple design with a gradient background that resonated with the sky shader of the 3D scene. &lt;a href=&quot;https://mad.ac/team/nicholas&quot;&gt;Nicholas&lt;/a&gt; suggested using a blue background instead, as a reference to Twitter, and made great suggestions for the &lt;a href=&quot;https://rsms.me/inter/&quot;&gt;font&lt;/a&gt; and the spacing of the elements. The loading page is simply a div element that is only displayed while the scene is loading.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-css&quot;&gt;#loadingImg {
+background-color: #54a1e9;
+background: linear-gradient(#54a1e9, #7ba7f8);  /*optional*/
+margin: 0;
+height: 100%;
+width: 100%;
+background-attachment: fixed;
+font-weight: 400;
+font-size: 16px;
+opacity: 0.9;
+position: fixed;
+top: 0;
+left: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: opacity 1000ms ease-in-out;
+}
+
+#loadingImg.animate-out {
+  opacity: 0;
+}
+
+#loadingImg p {
+  animation-name: pulse;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;These are the data values that are affecting the room in its current form:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Average tone&lt;/strong&gt;: room type, the plant type vs. a pool, sky colors, plant shape, artwork type, artwork and mirror frame, sculpture type and shape&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Number of positive / negative / neutral tweets&lt;/strong&gt;: tints and shades, sky colors, pillows vs. chair&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Average subjectivity&lt;/strong&gt;: height of the mirror&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Number of &amp;quot;I&amp;quot;, &amp;quot;me&amp;quot;, &amp;quot;myself&amp;quot;, &amp;quot;my&amp;quot; and &amp;quot;mine&amp;quot;&lt;/strong&gt;: width of the mirror&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Average sentence length&lt;/strong&gt;: sky colors&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Number of unique words&lt;/strong&gt;: level of detail in the artwork, sculpture type, sculpture detail in torus sculpture&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Interactions with other users&lt;/strong&gt;: window size, plant growth&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Number of adjectives&lt;/strong&gt;: sculpture dimensions, sculpture shape in torus sculpture&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Number of &amp;quot;nature&amp;quot;, &amp;quot;plants&amp;quot; and &amp;quot;animals&amp;quot;&lt;/strong&gt;: a possible extra plant&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&amp;quot;Love&amp;quot; mentioned twice or more&lt;/strong&gt;: a pink table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I already have plenty of ideas how the project could be taken further. I would love to implement &lt;a href=&quot;https://mad.ac/team/pascal&quot;&gt;Pascal&amp;#39;s&lt;/a&gt; idea of creating different rooms for different time periods; for example, comparing someone&amp;#39;s Twitter room before and after the pandemic by limiting Tweepy’s search accordingly. One could also switch from Twitter to other text sources. One option would be to create a room that reflects one’s browsing history, or to compare the rooms for classic novels by using &lt;a href=&quot;https://www.gutenberg.org/&quot;&gt;Project Gutenberg&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;All in all, one single project managed to teach me new skills in NLP, introduce me to Three.js and take my web development skills to a new level. I’m thankful for the great teammates at MAD and I hope you readers have enjoyed the blog series as well!&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://tweetspace.mad.ac/&quot;&gt;Tweet Room app&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-13</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 12: Planning for the Final Weeks</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-12</link>
+				<pubDate>Fri, 11 Jun 2021 15:57:02 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-5&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-6&quot;&gt;Week 6: Blended Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-7&quot;&gt;Week 7: Restructuring the Project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-8&quot;&gt;Week 8: Drawing Board&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-9&quot;&gt;Week 9: Arranging Furniture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-10&quot;&gt;Week 10: Materials and Classes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-11&quot;&gt;Week 11: Different Room Types&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This week, I focused on editing some visual details. For example, inspired by the discussion with &lt;a href=&quot;https://mad.ac/team/nicholas&quot;&gt;Nicholas&lt;/a&gt;, I decided that every room should have a mirror, its size and other properties being determined by data. So far, I had only included a mirror if the account in question was very subjective in its tone. However, a mirror gives a lot of character to the room, and putting something there to replace it felt a bit artificial to begin with.&lt;/p&gt;
+&lt;p&gt;I also experimented with the mirror frames. Depending on the general design of the room, the frame now has a golden, wooden or dark, metallic finish. When creating the wooden frame, I learned that &lt;a href=&quot;https://threejs.org/docs/#api/en/materials/MeshBasicMaterial&quot;&gt;MeshBasicMaterial&lt;/a&gt; becomes handy with textures:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;let texture = new THREE.TextureLoader().load(&amp;quot;/static/hardwood2_diffuse.jpeg&amp;quot;);
+texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+let material = new THREE.MeshBasicMaterial({
+  map: texture
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The room now has a bit more realistic window as well. This is made by turning the back plane of the room into a box and adding three other narrow boxes to the sides and top of the empty space. The abstract sculpture in the scene is by &lt;a href=&quot;https://sketchfab.com/3d-models/deformed-ball-4e92e4edb588403d8f5955ad88d2a798&quot;&gt;Aiekick&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-12/sunlight.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-12/sunlight.png 512w,/media/1024/images/engineering/veera-intern-blog-week-12/sunlight.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-12/sunlight.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-12/sunlight.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-12/sunlight.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Pink room with golden mirror frame and sky&quot; /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;more-to-come&quot;&gt;More to Come!&lt;/h2&gt;
+&lt;p&gt;One interesting challenge was to vary the colors of the &lt;a href=&quot;https://threejs.org/examples/webgl_shaders_sky.html&quot;&gt;sky shader&lt;/a&gt; according to the data. After trial and error, I was able to make some changes by following the code in &lt;a href=&quot;https://discourse.threejs.org/t/skyshader-example-how-to-change-colors/7907&quot;&gt;this discussion&lt;/a&gt; and making those changes in my &lt;code&gt;sky.js&lt;/code&gt; file that otherwise was a copy of the official Three.js sky object file. I didn&amp;#39;t achieve the color range that I wanted yet, however, this was a nice example of taking a Three.js object and tweaking it to suit one&amp;#39;s own purposes.&lt;/p&gt;
+&lt;p&gt;It has been an intense 3 months. According to our original plan, the project should be published now as the internship would come to an end. However, we have decided to continue with the project in May as well! Though the prototype could be left as it is – it already turns Twitter data into a custom 3D visual – we thought that there is more to explore, and it&amp;#39;s nice to give some thought to the final touches.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt; and I created a &lt;a href=&quot;https://linear.app/&quot;&gt;Linear&lt;/a&gt; board for the final weeks of the project. We placed tasks that could be interesting possibilities (introducing audio, more generative shapes etc.) but are not crucial in the backlog. This left 23 tasks in the &amp;quot;To Do&amp;quot; column, ranging from mapping of sky colors to improving NLP calculations on the Python side. It will be exciting to take this further!&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-12</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 11: Different Room Types</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-11</link>
+				<pubDate>Thu, 10 Jun 2021 16:15:02 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-5&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-6&quot;&gt;Week 6: Blended Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-7&quot;&gt;Week 7: Restructuring the Project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-8&quot;&gt;Week 8: Drawing Board&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-9&quot;&gt;Week 9: Arranging Furniture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-10&quot;&gt;Week 10: Materials and Classes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I started the week by deciding and sketching three different room types: a pastel room, room with neutral colors and room with dark interior. At this stage, these categories are based on the positivity or negativity of the account. The material of the walls is simply decided with if statements:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;if (avgTone &amp;lt; 0.095) {
+  wallMat = new DarkMaterial({
+    color: 0x3d3b3d,
+    emissive: new THREE.Color(lightness, lightness, lightness)
+  });
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Within &lt;code&gt;DarkMaterial&lt;/code&gt;, I&amp;#39;m altering the final shade with variable &lt;code&gt;lightness&lt;/code&gt;. I&amp;#39;m mapping the number of negative tweets to a value between 0 and 1 that works well when determining the RGB of the emissive color. With the room with neutral or pastel colors, I&amp;#39;m mapping the number of neutral or positive tweets respectively.&lt;/p&gt;
+&lt;p&gt;I also decided that each room has a sculpture. Currently, whether the sculpture is modern or traditional depends on if the word &amp;quot;future&amp;quot; is mentioned on the account. If the sculpture is modern, it might be round or have sharp edges, again depending on the profile. The room also has something to sit on: depending on some data, I’ll be switching between soft pillows and a modern chair.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-11/sunlight2.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-11/sunlight2.png 512w,/media/1024/images/engineering/veera-intern-blog-week-11/sunlight2.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-11/sunlight2.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-11/sunlight2.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-11/sunlight2.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Pink room with plants and pillows&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;With the sculptures, pillows and chair, I’m bringing glTF models back to my app by using some free and lightweight models from &lt;a href=&quot;https://sketchfab.com/&quot;&gt;Sketchfab&lt;/a&gt;. The models you can see on this post are by &lt;a href=&quot;https://sketchfab.com/3d-models/modern-dining-chair-cf43cd4a84e044fd9830d3a5969fb19f&quot;&gt;Johnson Martin&lt;/a&gt;, &lt;a href=&quot;https://sketchfab.com/3d-models/pillow-917f876032864a4d9719a20c8fa5f492&quot;&gt;karymeh3d&lt;/a&gt;, &lt;a href=&quot;https://sketchfab.com/3d-models/head-of-david-but-with-hay-585af747e89f4e78afda322c487a5059&quot;&gt;doubletwisted&lt;/a&gt; and &lt;a href=&quot;https://sketchfab.com/3d-models/deformed-ball-4e92e4edb588403d8f5955ad88d2a798&quot;&gt;Aiekick&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;if (avgTone &amp;gt; 0.2) {
+  loader.load(
+    &amp;quot;/static/pillow/scene.gltf&amp;quot;,
+
+    function (gltf) {
+      gltf.scene.traverse(function (child) {
+        if (child.isMesh) {
+          child.material = new THREE.MeshLambertMaterial({
+            color: 0x75b9db,
+            emissive: 0x8b82a5
+          });
+          child.castShadow = true;
+        }
+      });
+      gltf.scene.position.x = -10;
+      gltf.scene.position.y = 8;
+      gltf.scene.position.z = -110;
+      gltf.scene.rotateY((Math.PI / 2) * 0.85);
+      gltf.scene.scale.set(10, 10.5, 10);
+      scene.add(gltf.scene);
+    }
+  );
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Additionally, the scene now uses a sky and sun shader based on this &lt;a href=&quot;https://threejs.org/examples/webgl_shaders_sky.html&quot;&gt;Three.js example&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;setting-the-lights&quot;&gt;Setting the Lights&lt;/h2&gt;
+&lt;p&gt;Sometimes the room does not have a plant. In this experiment, when the tone of the account is negative enough, the plant is replaced with a small pool instead:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-11/pool.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-11/pool.png 512w,/media/1024/images/engineering/veera-intern-blog-week-11/pool.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-11/pool.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-11/pool.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-11/pool.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Pool with sunlight&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Here we can see another difference: sunlight!&lt;/p&gt;
+&lt;p&gt;This week, both I and &lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt; spent a lot of time studying the lights in Three.js. Some good resources:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://discoverthreejs.com/book/first-steps/physically-based-rendering/&quot;&gt;Discover three.js&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://redstapler.co/threejs-realistic-light-shadow-tutorial/&quot;&gt;Red Stapler&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=T6PhV4Hz0u4/&quot;&gt;SimonDev&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://sundaysundae.co/how-to-make-low-poly-look-good/&quot;&gt;Sunday Sundae&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://threejsfundamentals.org/threejs/lessons/threejs-lights.html&quot;&gt;Three.js Fundamentals&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the current setup, I have one &lt;code&gt;AmbientLight&lt;/code&gt; giving a general, soft lightning to the room. It doesn&amp;#39;t create shadows and it has no direction. Second, there is a &lt;code&gt;PointLight&lt;/code&gt; in the ceiling that behaves a bit like a lightbulb. There is also a &lt;code&gt;Spotligt&lt;/code&gt; directed at the plant and the vase. Finally, my favorite: a yellow &lt;code&gt;RectArea&lt;/code&gt; light that is basically a plane that simulates sunlight right where the window is.&lt;/p&gt;
+&lt;p&gt;Lights and materials proved to be a huge topic as, for example, plants using &lt;code&gt;PhongMaterial&lt;/code&gt; went black when combined with the &lt;code&gt;physicallyCorrectLights&lt;/code&gt; setting that worked well with &lt;code&gt; StandardMaterial&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://mad.ac/team/nicholas&quot;&gt;Nicholas&lt;/a&gt; joined one of our sessions and gave good feedback on the visuals. For example, he suggested that the loud patterns of the floor could be used on smaller object instead so that objects on the floor are able to stand out. I agree; the floor patterns can easily be used to create an abstract painting.&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-11</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 10: Materials and Classes</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-10</link>
+				<pubDate>Tue, 08 Jun 2021 14:43:02 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-5&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-6&quot;&gt;Week 6: Blended Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-7&quot;&gt;Week 7: Restructuring the Project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-8&quot;&gt;Week 8: Drawing Board&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-9&quot;&gt;Week 9: Arranging Furniture&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This week meant a lot of progress for the project. To keep this post compact, I will focus on two things that gave me direction: richer use of materials and introduction of classes.&lt;/p&gt;
+&lt;p&gt;Firstly, as we have dived into a lot of shader programming recently, writing custom shaders has felt like the default option for creating the surfaces of the room. However, by looking at some examples, it became clear that interesting, lively surfaces don’t necessarily need a custom shader, but can also rely on creative uses of the built-in ones.&lt;/p&gt;
+&lt;p&gt;One example we studied with &lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt; was this fun &lt;a href=&quot;https://www.stinkstudios.com/work/hands-wtf&quot;&gt;project&lt;/a&gt; by &lt;strong&gt;Stink Studios&lt;/strong&gt;. It renders a wild selection of patterns and materials on a simple, hand-shaped mesh. We were especially inspired by the way they use environment maps for reflections. If one dives into the source code in developer mode, one finds a large bunch of images that are never visible per se, but rather used to create interesting reflections on the object.&lt;/p&gt;
+&lt;p&gt;So, for example, one can create a sphere or statue with &lt;a href=&quot;https://threejs.org/docs/#api/en/materials/MeshStandardMaterial&quot;&gt;MeshStandardMaterial&lt;/a&gt; and define its metalness and roughness. Like a real metallic object, the mesh now reflects the light sources in the room. However, maybe we want the statue to reflect some interesting colors and patterns. Or maybe we want it to reflect a room or building, sparking the viewer&amp;#39;s imagination by hinting at something that exists outside the viewport.&lt;/p&gt;
+&lt;p&gt;For this kind of results, Three.js uses environment maps. In this &lt;a href=&quot;https://threejs.org/examples/#webgl_materials_displacementmap&quot;&gt;example&lt;/a&gt;, the pleasant reflections are partly created with images of the Swedish Royal Palace, even if there is nothing castle-like visible in the scene.&lt;/p&gt;
+&lt;p&gt;To create a pink shape that uses the six castle images for reflections, one can create a &lt;code&gt;reflectionCube&lt;/code&gt; and do the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const path = &amp;quot;/static/images/&amp;quot;;
+const format = &amp;quot;.jpeg&amp;quot;;
+const urls = [
+  path + &amp;quot;px&amp;quot; + format,
+  path + &amp;quot;nx&amp;quot; + format,
+  path + &amp;quot;py&amp;quot; + format,
+  path + &amp;quot;ny&amp;quot; + format,
+  path + &amp;quot;pz&amp;quot; + format,
+  path + &amp;quot;nz&amp;quot; + format
+];
+
+const reflectionCube = new THREE.CubeTextureLoader().load(urls);
+reflectionCube.encoding = THREE.sRGBEncoding;
+const exampleMaterial = new THREE.MeshStandardMaterial({
+  color: 0xff80ce,
+  emissive: 0x842bd7,
+  metalness: 0.0,
+  roughness: 0.01,
+  envMap: reflectionCube,
+  envMapIntensity: 1.0
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;creating-plants-with-classes&quot;&gt;Creating Plants with Classes&lt;/h2&gt;
+&lt;p&gt;We also started to make the project code more manageable by introducing classes. Again, classes are familiar to me via Processing and openFrameworks, so that made the topic easier to approach. One resource I’m going to study further is by &lt;a href=&quot;https://www.w3schools.com/js/js_classes.asp&quot;&gt;W3Schools&lt;/a&gt;. I usually find their tutorials very clear and pleasant to follow.&lt;/p&gt;
+&lt;p&gt;In object-oriented programming, classes increase scalability and modularity. The benefits of using classes are very clear in this sort of an open-ended, experimental project. Instead of having 100 lines of code in my index.js that just generates a certain kind of a plant, I have plants.js file containing a few plant classes. Then in the main code I’m free to choose between a rose and a cactus easily, just with a few lines of code.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;let plant = new ExperimentPlant();
+plant.mesh.position.x = -20;
+plant.mesh.position.y = 0;
+plant.mesh.position.z = 20;
+scene.add(plant.mesh);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Speaking of plants, I created a happy accident when exploring geometry distortions with &lt;a href=&quot;https://threejs.org/examples/webgl_morphtargets.html&quot;&gt;morphtargets&lt;/a&gt; . I was able to distort a box in a way that created a plant-like shape:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-10/plant.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-10/plant.png 512w,/media/1024/images/engineering/veera-intern-blog-week-10/plant.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-10/plant.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-10/plant.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-10/plant.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Big plant shape in pink room&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;With help from Nikolai, I had already experimented creating plant-like shapes with spheres and for loops:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-10/sphereplant.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-10/sphereplant.png 512w,/media/1024/images/engineering/veera-intern-blog-week-10/sphereplant.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-10/sphereplant.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-10/sphereplant.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-10/sphereplant.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Sphere plant shape and cylinders in pink room&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;We created a similar class-based approach to floors as well. In the main code, a floor with circle pattern can now be called just with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const floorMat = new FloorMaterial({ type: &amp;quot;circles&amp;quot;, aspect: 2, scale: 1 });
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, I will sketch a few example rooms and plan how their elements are connected. Then, within these main room types, there is variation. For example, maybe a pink wall and blue tile floor always go hand in hand, but NLP data affects how detailed the tile pattern is.&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-10</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 9: Arranging Furniture</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-9</link>
+				<pubDate>Mon, 07 Jun 2021 10:10:02 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-5&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-6&quot;&gt;Week 6: Blended Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-7&quot;&gt;Week 7: Restructuring the Project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-8&quot;&gt;Week 8: Drawing Board&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This week, I spent time planning a function that could be used to position objects in the room. For example, I might want to place two cubes around a plant, but they should never overlap with the plant or each other. When trying to understand this problem, I found this &lt;a href=&quot;https://www.youtube.com/watch?v=XATr_jdh-44&quot;&gt;video&lt;/a&gt; by &lt;strong&gt;Daniel Shiffman&lt;/strong&gt; very useful. That combined with pseudocode that &lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt; provided was the key to create some functions.&lt;/p&gt;
+&lt;p&gt;The pseudocode:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;for (let i = 0; i &amp;lt; max; i++) {
+  outer: for (;;) {
+    let point = make_random_point();
+    for (let j = 0; j &amp;lt; i; j++) {
+      if (dist(locations[j], point) &amp;lt; limit) {
+        continue outer;
+      }
+    }
+    locations.push(point);
+    break;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We wanted to create arrays for the possible locations of objects, either around a circle or semicircle. There is a central object with some orbiting objects:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const locationsCircle = [];
+const locationsHalfCircle = [];
+
+function neighbour_location_circle({ cx, cy, cz, min, max, startAngle = 0, endAngle = 2 * Math.PI }) {
+  // distance from the object in the center
+  const distance = min + (max - min) * Math.random();
+  const angle = startAngle + (endAngle - startAngle) * Math.random();
+  return [cx + distance * Math.cos(angle), cy, cz + distance * Math.sin(angle)];
+}
+
+// how close to each other the orbiting objects can be
+let limit = 6;
+// number of positions to create
+let numOfLoc = 3;
+
+function dist(x1, x2, y1, y2) {
+  var a = x1 - x2;
+  var b = y1 - y2;
+  return Math.sqrt(a * a + b * b);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Creating positions for orbiting objects by using &lt;code&gt;limit&lt;/code&gt; and checking that they don&amp;#39;t overlap:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;for (let i = 0; i &amp;lt; numOfLoc; i++) {
+  outer: for (;;) {
+    let point = neighbour_location_circle({
+      cx: xLoc,
+      cy: yLoc,
+      cz: 5,
+      min: 15,
+      max: 25
+    });
+    for (let j = 0; j &amp;lt; i; j++) {
+      if (dist(locationsCircle[j][0], point[0], locationsCircle[j][2], point[2]) &amp;lt; limit) {
+        continue outer;
+      }
+    }
+    locationsCircle.push(point);
+    break;
+  }
+}
+
+// now we add spheres that orbit the box (as a circle)
+for (let i = 0; i &amp;lt; numOfLoc; i++) {
+  const ballGeometry = new THREE.SphereGeometry(5, 5, 5);
+  const material = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    emissive: 0x444444
+  });
+  const ball = new THREE.Mesh(ballGeometry, material);
+  ball.position.x = locationsCircle[i][0];
+  ball.position.y = locationsCircle[i][1];
+  ball.position.z = locationsCircle[i][2];
+  scene.add(ball);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For placing the objects in a semicircle (so that they don&amp;#39;t end up inside a wall), we modify the start and end angle in the &lt;code&gt;neighbour_location_circle&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;for (let i = 0; i &amp;lt; numOfLoc; i++) {
+  outer: for (;;) {
+    let point = neighbour_location_circle({
+      cx: 45,
+      cy: 5,
+      cz: 5,
+      min: 15,
+      max: 25,
+      startAngle: Math.PI / 2,
+      endAngle: (3 / 2) * Math.PI
+    });
+    for (let j = 0; j &amp;lt; i; j++) {
+      if (dist(locationsCircle[j][0], point[0], locationsCircle[j][2], point[2]) &amp;lt; limit) {
+        continue outer;
+      }
+    }
+    locationsHalfCircle.push(point);
+    break;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;adding-new-data-points&quot;&gt;Adding New Data Points&lt;/h2&gt;
+&lt;p&gt;It was also time to make the room visuals a bit more advanced. One of the elements of the room is a big blob that floats in the middle – a bit like a brain inside a head. Luckily, when working on my own art project on my free time, I had bumped into this &lt;a href=&quot;https://www.clicktorelease.com/blog/experiments-with-perlin-noise/&quot;&gt;resource&lt;/a&gt; about deformations with Perlin noise.&lt;/p&gt;
+&lt;p&gt;This animated blob is based on a vertex shader and fragment shader, added with a texture image. It&amp;#39;s a good example on how to use normals and materials in deformations. An interesting thing with textures is that they can add a whole other dimension to the visual: you can use any image as a texture, and the shape will then reflect that image, hinting at a space or object that exists outside the viewport.&lt;/p&gt;
+&lt;p&gt;Finally, I spent time on the Python side of the app, adding a bunch of new variables that are based on the NLP calculations. The values that client side receives are now:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;avgTone&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;avgSubj&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;numOfMe&lt;/code&gt; (number of &amp;quot;I&amp;quot; and &amp;quot;me&amp;quot; words)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;avgSentenceLength&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;numOfUnique&lt;/code&gt; (number of unique words)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;interactionAmount&lt;/code&gt; (number of @ tags)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;numOfNeg&lt;/code&gt; (number of negative tweets)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;numOfPos&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;numOfNeutr&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;numOfAll&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I always enjoy exploring how easily Python can handle data. For example, I was prepared for requiring multiple lines of code to extract all the @ tags from an account. Finally it was just:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;interactions = re.findall(r&amp;#39;@[\w\.-]+&amp;#39;,str(whole_text_sample))
+numOfInteractions = len(interactions)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-9</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 8: Drawing Board</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-8</link>
+				<pubDate>Wed, 02 Jun 2021 18:21:01 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-5&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-6&quot;&gt;Week 6: Blended Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-7&quot;&gt;Week 7: Restructuring the Project&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now that we had a nice app architecture, &lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt; advised me to sketch the room&amp;#39;s interiors further. We needed to have an idea of the essential elements of the room. I really enjoyed going back to prototyping on paper, just like I did throughout my studies at Goldsmiths:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-8/sketch1.jpg&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-8/sketch1.jpg 512w,/media/1024/images/engineering/veera-intern-blog-week-8/sketch1.jpg 1024w,/media/2048/images/engineering/veera-intern-blog-week-8/sketch1.jpg 2048w,/media/3072/images/engineering/veera-intern-blog-week-8/sketch1.jpg 3072w,/media/4096/images/engineering/veera-intern-blog-week-8/sketch1.jpg 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Room sketch, round&quot; /&gt;
+&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-8/sketch2.jpg&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-8/sketch2.jpg 512w,/media/1024/images/engineering/veera-intern-blog-week-8/sketch2.jpg 1024w,/media/2048/images/engineering/veera-intern-blog-week-8/sketch2.jpg 2048w,/media/3072/images/engineering/veera-intern-blog-week-8/sketch2.jpg 3072w,/media/4096/images/engineering/veera-intern-blog-week-8/sketch2.jpg 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Room sketch, cube&quot; /&gt;
+&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-8/sketch3.jpg&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-8/sketch3.jpg 512w,/media/1024/images/engineering/veera-intern-blog-week-8/sketch3.jpg 1024w,/media/2048/images/engineering/veera-intern-blog-week-8/sketch3.jpg 2048w,/media/3072/images/engineering/veera-intern-blog-week-8/sketch3.jpg 3072w,/media/4096/images/engineering/veera-intern-blog-week-8/sketch3.jpg 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Room sketch, another cube&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;I also collected a few Shadertoy examples that captured the simple but intriguing visuals that I was after. These examples are based on fragment shaders and buffers, not Three.js, but I wanted to share them with Nikolai as a visual reference:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.shadertoy.com/view/3tBGzW&quot;&gt;Ball Room Dance&lt;/a&gt; by shau&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.shadertoy.com/view/4sS3zc&quot;&gt;Mirror Room&lt;/a&gt; by DiLemming&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.shadertoy.com/view/MldGDl&quot;&gt;PBR Column Room&lt;/a&gt; by geoff&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.shadertoy.com/view/4sdSDs&quot;&gt;Reality Warp&lt;/a&gt; by tomaes&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.shadertoy.com/view/lsjczK&quot;&gt;Mirror room&lt;/a&gt; by Yrau&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.shadertoy.com/view/4ssBWr&quot;&gt;Grey Room&lt;/a&gt; by lz&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.shadertoy.com/view/Xscyz7&quot;&gt;Dobrar a meta&lt;/a&gt; by mmutai&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;getting-all-the-tweets&quot;&gt;Getting All the Tweets&lt;/h2&gt;
+&lt;p&gt;On the Flask side, I was looking into &lt;a href=&quot;https://docs.tweepy.org/en/latest/api.html&quot;&gt;Tweepy API&lt;/a&gt; docs. As a default, Tweepy’s &lt;code&gt;api.user_timeline&lt;/code&gt; returns 200 newest tweets from an account. However, I want all the tweets from a certain account, and possibly the ability to filter them based on date. I did some research on Stackoverflow and found that Tweepy’s &lt;code&gt;Cursor&lt;/code&gt; object is a way to achieve this.&lt;/p&gt;
+&lt;p&gt;Before:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;posts = api.user_timeline(screen_name=username, count = 200, lang =&amp;quot;en&amp;quot;, tweet_mode=&amp;quot;extended&amp;quot;)
+for tweet in posts[:199]:
+    cleanedText = cleanTxt(tweet.full_text)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;for tweet in tweepy.Cursor(api.user_timeline, screen_name=username, tweet_mode=&amp;quot;extended&amp;quot;).items(): # Returns all the tweets
+    cleanedText = cleanTxt(tweet.full_text)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This worked, however, it had a major impact on the performance. Whereas &lt;code&gt;api.user_timeline&lt;/code&gt; returns 200 tweets almost instantly, &lt;code&gt;Cursor&lt;/code&gt; object might spend one minute extracting thousands of tweets from the account. Even when limiting the number of tweets to 500, the process is very slow. This is something that needs to be solved when I focus more on the data side of the project again.&lt;/p&gt;
+&lt;p&gt;By using our new project structure, we built a very simple starter scene with Nikolai. It has walls and a bunch of spheres and cubes. We agreed that I take some time to build a GUI for the scene and to create “organic” random numbers. For example, I might want to place a plant on the floor and within a certain distance from the left wall, but not always at the same x,y,z position.&lt;/p&gt;
+&lt;p&gt;I was able to build a simple GUI to control minimum and maximum position coordinates and minimum and the number of spheres or cubes that would be generated. I also studied some Perlin noise &lt;a href=&quot;https://gist.github.com/pkorac/bfcc434d2986a27a3e1f&quot;&gt;implementations&lt;/a&gt; in order to map noise values from 0 to 1 to bigger distances in the room. With Nikolai, we went through the code that I had so far. To make the visual experiments easier, I wanted the app to remember the newest GUI settings instead of returning to default values with every page refresh. The solution was this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const saved = JSON.parse(localStorage.getItem(&amp;quot;params&amp;quot;) || &amp;quot;{}&amp;quot;);
+
+const params = {
+  minSpheres: 4,
+  maxSpheres: 10,
+  minX: -50,
+  minY: -50,
+  maxX: 50,
+  maxY: 50,
+  minZ: -50,
+  maxZ: 50,
+  minRadius: 2,
+  maxRadius: 20,
+  ...saved
+};
+
+function save() {
+  localStorage.setItem(&amp;quot;params&amp;quot;, JSON.stringify(params));
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-8</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 7: Restructuring the Project</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-7</link>
+				<pubDate>Mon, 31 May 2021 18:22:01 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-5&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-6&quot;&gt;Week 6: Blended Approach&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;While figuring out how to distort shapes with vertex shaders in glTF, we decided to give OBJ models a try with &lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt;. We worked with Three.js OBJLoader &lt;a href=&quot;https://threejs.org/examples/#webgl_loader_obj&quot;&gt;example&lt;/a&gt; and were able to distort the default 3D model with a simple vertex shader. However, when trying to apply this knowledge to some simple 3D boxes that were exported from Blender, the result kept &amp;quot;exploding&amp;quot; again instead having a noisy surface.&lt;/p&gt;
+&lt;p&gt;A friend of mine from Goldsmiths, &lt;a href=&quot;https://github.com/lxinspc&quot;&gt;Nathan&lt;/a&gt;, gave me a tip about &lt;a href=&quot;https://threejs.org/docs/index.html?q=vertex#examples/en/helpers/VertexNormalsHelper&quot;&gt;VertexNormalsHelper&lt;/a&gt; in Three.js. It visualizes vertex normal vectors with arrows. I used it to compare normals of a plane, Three.js primitive box and an OBJ box exported from Blender:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-7/vertex_helpers.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-7/vertex_helpers.png 512w,/media/1024/images/engineering/veera-intern-blog-week-7/vertex_helpers.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-7/vertex_helpers.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-7/vertex_helpers.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-7/vertex_helpers.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Scene with green vertex helpers&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Despite triangulating the box model in Blender with many different settings, it doesn&amp;#39;t seem to have any vertex normal vectors on its faces. To achieve smooth distortions and animations, we need good normals and meshes with plenty of vertices. This is definitely one of the priorities during the next weeks.&lt;/p&gt;
+&lt;h2 id=&quot;time-to-npm-install&quot;&gt;Time to npm install&lt;/h2&gt;
+&lt;p&gt;However, we made exciting progress with other parts of the project this week. Firstly, Nikolai had prepared a Node.js based app structure that can be useful for quick tests in many kinds of projects as it is easy to edit and copy previous sketches to make new ones:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-7/file_list.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-7/file_list.png 512w,/media/1024/images/engineering/veera-intern-blog-week-7/file_list.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-7/file_list.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-7/file_list.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-7/file_list.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;List of sketches in Node app&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;This was a good time for switching to use Three.js with npm in my project as well. So far, the library has lived in my project as a script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;&amp;lt;script src=&amp;quot;js/three.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;However, many useful tools like 3D model loaders and GUIs are not included in this. When using npm instead, we have the main &lt;code&gt;javascript three.module.js&lt;/code&gt; file and many other useful modules that are ready to be imported from the jsm folder. This is how Three.js &lt;a href=&quot;https://threejs.org/examples/&quot;&gt;examples&lt;/a&gt; are built as well:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;&amp;lt;script type=&amp;quot;module&amp;quot;&amp;gt;
+  import * as THREE from &amp;#39;../build/three.module.js&amp;#39;; import Stats from &amp;#39;./jsm/libs/stats.module.js&amp;#39;; import {GUI} from
+  &amp;#39;./jsm/libs/dat.gui.module.js&amp;#39;; import {OrbitControls} from &amp;#39;./jsm/controls/OrbitControls.js&amp;#39;;
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Secondly, it was time to actually start to think about the production. What kind of architecture would the data viz app need? Instead of having our usual shader workshop, we took the time to plan the project structure. As a result, we had a to do list as a file &lt;code&gt;architure.md&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- [ ] Separation between server and client
+- [ ] Reproducible way of running server and client
+- [ ] Frontend build flow (bundle)
+- [ ] Automatic deployments
+- [ ] Way of iterating quickly
+- [ ] Live development environment
+- [ ] Graphics data loading (meshes, textures, maybe sounds)
+- [ ] Twitter data loading
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Until now, the projects’ Github repo was a mixture of my almost-up-to-date Flask files and some Three.js experiments as html files. Local version:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-7/folder_before.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-7/folder_before.png 512w,/media/1024/images/engineering/veera-intern-blog-week-7/folder_before.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-7/folder_before.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-7/folder_before.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-7/folder_before.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Macbook folder with random files&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;After our restructuring process:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-7/folder_after.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-7/folder_after.png 512w,/media/1024/images/engineering/veera-intern-blog-week-7/folder_after.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-7/folder_after.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-7/folder_after.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-7/folder_after.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Macbook folder with Node.js structure&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The project now uses a bundler as well. This is to automate the combining and loading of Javascript files, to enhance performance and to save us from headache with dependencies. One can learn more about bundlers from this &lt;a href=&quot;https://javascript.plainenglish.io/intro-to-module-bundlers-fd3df36925e5&quot;&gt;article&lt;/a&gt; or from this &lt;a href=&quot;https://www.youtube.com/watch?v=3UWlufSzO4k&quot;&gt;video&lt;/a&gt;. The bundler we chose was &lt;a href=&quot;https://github.com/evanw/esbuild&quot;&gt;esbuild&lt;/a&gt; and it proved to be extremely fast.&lt;/p&gt;
+&lt;p&gt;Better still, my app still ran locally after the total renewal of the architecture. We could tick a few boxes!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- [x] Separation between server and client
+- [x] Reproducible way of running server and client
+- [x] Frontend build flow (bundle)
+- [ ] Automatic deployments
+- [ ] Way of iterating quickly
+- [ ] Live development environment
+- [ ] Graphics data loading (meshes, textures, maybe sounds)
+- [ ] Twitter data loading
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-7</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 6: Blended Approach</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-6</link>
+				<pubDate>Fri, 28 May 2021 13:01:01 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 5: Back to Inspiration Images&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Towards the end of the last week I received great feedback from &lt;a href=&quot;https://mad.ac/team/pascal&quot;&gt;Pascal&lt;/a&gt;. So far we haven&amp;#39;t collaborated on my project, so he was able to present ideas from a fresh perspective.&lt;/p&gt;
+&lt;p&gt;The most fascinating idea was that the data visualization could show the room before and after the pandemic. To achieve this, one could create a button for getting the tweets either from 2019 or from the start of 2020, for example. Based on this &lt;a href=&quot;https://stackoverflow.com/questions/64198102/collect-tweets-in-a-specific-time-period-in-tweepy-until-and-since-doesnt-work&quot;&gt;discussion&lt;/a&gt; on Stackoverflow, it should be doable.&lt;/p&gt;
+&lt;p&gt;Pascal also showed me an interesting reference by &lt;a href=&quot;https://blobmixer.14islands.com/&quot;&gt;14 Islands&lt;/a&gt;. This Blobmixer is also done with Three.js and has the shiny, sticky visuals I would want to achieve. One can approach this task in many ways, but in our case we try to build interesting visuals with vertex and fragment shaders that can then be applied to the walls and objects in the room.&lt;/p&gt;
+&lt;h2 id=&quot;importing-3d-models&quot;&gt;Importing 3D models&lt;/h2&gt;
+&lt;p&gt;In our shader sessions we decided to move from 3D primitives to 3D models exported from Blender. For example, we had bumped into some limitations while building the room out of plane primitives. This bubbly &lt;a href=&quot;https://github.com/spite/vertex-displacement-noise-3d-webgl-glsl-three-js&quot;&gt;vertex shader&lt;/a&gt; did not look so convincing when applied to a bunch of planes with visible edges, but looks much better on the sphere primitive:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-6/vertex_shader_noise.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-6/vertex_shader_noise.png 512w,/media/1024/images/engineering/veera-intern-blog-week-6/vertex_shader_noise.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-6/vertex_shader_noise.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-6/vertex_shader_noise.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-6/vertex_shader_noise.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Colorful planes and sphere affected with noise&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Three.js provides a bunch of different &lt;a href=&quot;https://threejs.org/docs/index.html#manual/en/introduction/Loading-3D-models&quot;&gt;loaders&lt;/a&gt; for importing 3D models. The recommended format is glTF. Their glTFLoader &lt;a href=&quot;https://threejs.org/docs/index.html#examples/en/loaders/GLTFLoader&quot;&gt;documentation&lt;/a&gt; gave us good tips, but eventually I found a simpler way to upload the model while searching on &lt;a href=&quot;https://stackoverflow.com/questions/56660584/how-to-override-gltf-materials-in-three-js&quot;&gt;Stackoverflow&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;loader.load(&amp;quot;models/boxTemplate4.gltf&amp;quot;, function (gltf) {
+  const model = gltf.scene;
+  model.traverse((o) =&amp;gt; {
+    if (o.isMesh) o.material = modelMaterial;
+  });
+  model.position.y = 72;
+  model.position.x = 0;
+  model.position.z = 20;
+  model.scale.set(4, 4, 4);
+  scene.add(model);
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In Blender, I had created a cube without the front wall and it accepted one of the Three.js&amp;#39;s example fragment shaders happily:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-6/plain_cube.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-6/plain_cube.png 512w,/media/1024/images/engineering/veera-intern-blog-week-6/plain_cube.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-6/plain_cube.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-6/plain_cube.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-6/plain_cube.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Plain 3D cube, grey&quot; /&gt;
+&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-6/cube_fragment_shader.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-6/cube_fragment_shader.png 512w,/media/1024/images/engineering/veera-intern-blog-week-6/cube_fragment_shader.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-6/cube_fragment_shader.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-6/cube_fragment_shader.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-6/cube_fragment_shader.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;3D cube with blue and orange shader&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;However, this was a beginning for lengthy debugging. I combined the fragment shader above with the previously mentioned &lt;a href=&quot;https://github.com/spite/vertex-displacement-noise-3d-webgl-glsl-three-js&quot;&gt;noisy vertex shader&lt;/a&gt; and started to apply the combination to different shapes:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const planeRight = new THREE.Mesh(
+  planeGeo,
+  new THREE.ShaderMaterial({
+    vertexShader: document.getElementById(&amp;quot;explosionVertexShader&amp;quot;).textContent,
+    fragmentShader: document.getElementById(&amp;quot;fragmentShader2&amp;quot;).textContent,
+    uniforms: uniformsSides
+  })
+);
+planeRight.position.x = 50;
+planeRight.position.y = 70;
+planeRight.rotateY(-Math.PI / 2);
+scene.add(planeRight);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This worked fine with planes, but it exploded the glTF model into pieces, instead of providing bubbly noise:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-6/explosion.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-6/explosion.png 512w,/media/1024/images/engineering/veera-intern-blog-week-6/explosion.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-6/explosion.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-6/explosion.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-6/explosion.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;glTF model is broken into thin lines&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;I continued debugging by using both the fragment and vertex shader from Spite’s repo. It worked fine with the sphere, but continued to break the glTF which is only visible as thin lines in the screenshot below :&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-6/sphere_and_lines.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-6/sphere_and_lines.png 512w,/media/1024/images/engineering/veera-intern-blog-week-6/sphere_and_lines.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-6/sphere_and_lines.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-6/sphere_and_lines.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-6/sphere_and_lines.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A noisy sphere and lines in a colourful room&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Next, my plan is to take a better look into &lt;a href=&quot;https://discourse.threejs.org/t/calculating-vertex-normals-after-displacement-in-the-vertex-shader/16989&quot;&gt;normals&lt;/a&gt; and to test the current shaders with some ready glTF models to make sure that the problem is not in my export process in Blender.&lt;/p&gt;
+&lt;p&gt;However, I also got some ideas from the beautiful accidents like below. Could a plant or object grow through a wall?&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-6/through_wall_screenshot.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-6/through_wall_screenshot.png 512w,/media/1024/images/engineering/veera-intern-blog-week-6/through_wall_screenshot.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-6/through_wall_screenshot.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-6/through_wall_screenshot.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-6/through_wall_screenshot.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;bubbly shape coming through a wall in pink room&quot; /&gt;&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-6</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 5: Back to Inspiration Images</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-5</link>
+				<pubDate>Thu, 27 May 2021 08:58:00 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-4&quot;&gt;Week 4: From 2D to 3D&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We continued with our 3D room from the last week by adding another shader to be buffered to another wall of the room. Additionally, we placed a sphere in the middle of the room. We found out that one can actually manipulate the vertices of a SphereGeometry with noise, meaning that the 3D primitives of Three.js are much more editable than I thought.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;for (const vertex of ballGeometry.vertices) {
+  vertex.normalize();
+  const distance = 20 + simplex.noise3D(vertex.x + timer * 0.1, vertex.y + timer * 0.1, vertex.z + timer * 0.1);
+  vertex.multiplyScalar(distance);
+}
+ballGeometry.computeVertexNormals();
+ballGeometry.computeFaceNormals();
+ballGeometry.verticesNeedUpdate = true;
+ballGeometry.normalsNeedUpdate = true;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;However, &lt;strong&gt;Nikolai&lt;/strong&gt; had a suggestion: before diving deeper into 3D shapes and deformations, he recommended me to go back to visual planning regarding the textures and the feeling I wanted to express in the app. By doing so now, we would know the exact tools we would need to learn to reach the desired result. This was a great piece of advice and also good decision regarding the workflow. Despite the endless amount of 3D and shader tutorials, there is a lot to digest as a beginner and it felt good to direct my energy to something different for a while.&lt;/p&gt;
+&lt;p&gt;As an example, &lt;a href=&quot;https://mad.ac/team/thabi&quot;&gt;Thabi&lt;/a&gt;, Nikolai and I had the fun challenge to build some animations for a client website from scratch. Working as group of three, debugging &lt;code&gt;&amp;lt;spans&amp;gt;&lt;/code&gt; and testing CSS animations was a refreshing change.&lt;/p&gt;
+&lt;h2 id=&quot;finding-anythingio&quot;&gt;Finding Anything.io&lt;/h2&gt;
+&lt;p&gt;Added to that, I wanted to take a quick look into my Flask app in order to have the different parts of my project fresh in my mind. These couple of hours ended up being very effective. I’m still in the process of learning Flask, Ninja and forms.&lt;/p&gt;
+&lt;p&gt;Currently the app is able to firstly analyze each tweet separately, returning the number of negative, positive and neutral tweets. Secondly, it appends all the tweets into one text file, enabling a handy access to some text traits like the most common words and the average sentence length.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;textMass = open(&amp;quot;textMass.txt&amp;quot;, &amp;quot;w&amp;quot;)
+
+for tweet in posts[:199]:
+    cleanedText = cleanTxt(tweet.full_text) # cleaning each tweet first
+    textMass.write(cleanedText) # adding tweets to text file
+
+textMass.close()
+file = open(&amp;quot;textMass.txt&amp;quot;)
+t = file.read()
+whole_text_sample = TextBlob(t) # Ready to analyze the text file as TextBlob
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I ended the week by searching for visual inspiration online. Nikolai provided me with an amazing source, &lt;a href=&quot;https://anything.io/everything&quot;&gt;anything.io&lt;/a&gt;, which takes one into a beautiful rabbit hole of inspiration images from Pinterest, Instagram and so on.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m after a visual that looks like an abstract room filled with brain cells. I don’t want the visual to be too realistic: it&amp;#39;s rather a stage for abstract shapes and clutter to collide. I want the look to be sweet and sticky, capturing the adrenaline rushes of social media likes. There&amp;#39;s a lot of room (pun intended) for expression: the amount of interaction the user has with the outside world could be translated to the amount of feedback in the shaders or, for example, to some holes on the walls, bringing in some new air to breathe.&lt;/p&gt;
+&lt;p&gt;Some visuals and shaders that felt inspirational in this context:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/kyndinfo/status/1367130890761949188&quot;&gt;Torus animation&lt;/a&gt; by Kynd&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://anything.io/thing/rHKBsX6o33zuMXEJm&quot;&gt;Untitled&lt;/a&gt; from Anything.io&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cake23.de/inline-webworker-thread.html&quot;&gt;Inline Webworker Thread&lt;/a&gt; from Cake23.de&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cake23.de/radiant-reef+chillwave+julia-fractal-mk2.html&quot;&gt;Shader mashup&lt;/a&gt; from Cake23.de&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cake23.de/milkyway+bivariate-datadepth+angular-domainmap.html&quot;&gt;Another Shader Mashup&lt;/a&gt; from Cake23.de&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cake23.de/turing-fluid.html&quot;&gt;Turing fluid&lt;/a&gt; from Cake23.de&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-5</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 4: From 2D to 3D</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-4</link>
+				<pubDate>Tue, 04 May 2021 16:10:01 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-3&quot;&gt;Week 3: Diving Into Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I started the week by revisiting the MAD website shader that we had already edited with &lt;strong&gt;Nikolai&lt;/strong&gt; last week. Again, I simulated incoming data by creating a few variables with random values and made them affect the RBG values of the background and foreground color:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;gl.uniform3f(uBackgroundColor, sentiment, 0.5705882352941176, 0.4549019607843137);
+gl.uniform3f(uForegroundColor, 0.4764705882352941, polarity, 0.8117647058823529);)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next we wanted to dive into a topic that allows for interesting chain reactions: buffers and FBOs. These are mostly familiar to me via openFrameworks. In my previous projects, I have for example switched between many FBOs with different textures based on Kinect and &lt;a href=&quot;https://vimeo.com/414854407&quot;&gt;webcam interaction&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Buffer objects are a way of passing the data that shader programs need onto the GPU. (You can learn more by checking the articles by &lt;a href=&quot;https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html#:~:text=Buffers%20are%20the%20way%20of,vertex%20data%20onto%20the%20GPU.&amp;amp;text=bufferData%20copies%20data%20into%20the,to%20the%20vertex%20shader&amp;#39;s%20attributes.&quot;&gt;WebGL Fundamentals&lt;/a&gt; and by &lt;a href=&quot;http://learnwebgl.brown37.net/rendering/buffer_object_primer.html&quot;&gt;Learn WebGL&lt;/a&gt;.) A frame buffer object (FBO), on the other hand, acts like an additional screen: one can draw yellow cubes onto one FBO, green spheres onto the other and then draw the contents of both FBOs onto the screen where one wants to.&lt;/p&gt;
+&lt;p&gt;We examined a beautiful &lt;a href=&quot;https://github.com/kynd/reactive_buffers_experiment&quot;&gt;example&lt;/a&gt; by &lt;strong&gt;Kynd&lt;/strong&gt; where reactive buffers interact with each other, resulting in watercolour-like patterns. We studied the code and edited the shader parameters to see which of them has the most visible effect on the final result.&lt;/p&gt;
+&lt;h2 id=&quot;choosing-a-library&quot;&gt;Choosing a library&lt;/h2&gt;
+&lt;p&gt;A bunch of interdependent 2D shaders can already get quite complex. What happens if a shader beginner wants to take them to 3D space? For my data viz project, I’m hoping to create a mental landscape where I could control the background and some other elements separately. One can imagine how amazing a 3D room would look like if its walls would be melting like in this lovely &lt;a href=&quot;https://reverent-poincare-afe081.netlify.app/river/&quot;&gt;shader project&lt;/a&gt; by &lt;strong&gt;Ezra Miller&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Here, libraries come to help. Nikolai showed me some examples using &lt;a href=&quot;https://github.com/oframe/ogl&quot;&gt;OGL&lt;/a&gt; that could be useful for this project. However, I decided to go with Three.js due to its large variety of examples. Editable materials like &lt;a href=&quot;https://threejs.org/docs/#api/en/materials/MeshStandardMaterial&quot;&gt;MeshStandardMaterial&lt;/a&gt; are also a bonus. For this project Three.js is a good choice, as it takes care of the less creative bits and lets the programmer focus on the shaders affecting the visuals and interaction with data.&lt;/p&gt;
+&lt;p&gt;By following &lt;a href=&quot;https://github.com/mrdoob/three.js/blob/master/examples/webgl_mirror_nodes.html&quot;&gt;this&lt;/a&gt; example, we created a simple 3D room from scratch and, instead of having a mirror, animated the back wall of the room based on a simple shader and a buffer:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-4/simple_room.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-4/simple_room.png 512w,/media/1024/images/engineering/veera-intern-blog-week-4/simple_room.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-4/simple_room.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-4/simple_room.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-4/simple_room.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A 3d room made of planes and animated shader&quot; /&gt;&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-4</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 3: Diving Into Shaders</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-3</link>
+				<pubDate>Tue, 20 Apr 2021 11:10:01 GMT</pubDate>
+				<description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-2&quot;&gt;Week 2: Refining the MVP&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It was a busy and exciting week for MAD amid the launch of the new website. On Monday, we still managed to meet up with &lt;strong&gt;Nikolai&lt;/strong&gt; and &lt;a href=&quot;https://mad.ac/team/nicholas&quot;&gt;Nicholas&lt;/a&gt; to talk about the possible visual directions for the data visualization.&lt;/p&gt;
+&lt;p&gt;I was encouraged to keep the visual outcome a bit open at this point. Instead of choosing to focus on a couple of basic geometries or a painting-like shader, Nikolai suggested that I explore as much as the timetable allows. We agreed that the NLP side of the text visualization app needs to be worked on simultaneously, but for the next two weeks it makes sense to focus on understanding Three.js and shaders as they are not as familiar to me. After creating a few visually appealing animations, it is then easy to choose the most interesting one and connect that to data.&lt;/p&gt;
+&lt;p&gt;I created a bunch of HTML files that I could fill with Three.js sketches and then just open them as tabs in the browser. One of the benefits of Three.js is that it can simply be included as a script in the HTML:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;js/three.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;…And then you are ready to create 3D scenes!&lt;/p&gt;
+&lt;h2 id=&quot;simulating-data&quot;&gt;Simulating data&lt;/h2&gt;
+&lt;p&gt;I decided to simulate data by creating a set of random values that could be coming from the NLP and server side:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;var value1 = Math.floor(Math.random() * 2001); // Could be number of tweets
+var value2 = Math.floor(Math.random()); // between 0 and 1
+var value3 = getRandomArbitrary(-1.0, 1.0); // Could be sentiment value between -1.0 and 1.0
+var value4 = Math.floor(Math.random() * 21); // Could be average sentence length
+var value5 = Array.from({ length: 2000 }, () =&amp;gt; Math.floor(Math.random() * 4)); // Could be certain values of all the accounts 2000 tweets
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I experimented with Three.js examples on groups, buffer geometries and lines. For example, I managed to make cube colors depend on an array called &lt;code&gt;randomValues&lt;/code&gt;, its length being the same as the number of the cubes.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;let randomValues = Array.from({ length: numberOfCubes }, () =&amp;gt; Math.floor(Math.random() * 10));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Each index can have a value between 0-9; if the value is more than 5, color is violet. This could be a simple way to illustrate the amount of negative or positive tweets in the user account. In a similar fashion, I experimented with &lt;a href=&quot;https://threejs.org/examples/#webgl_lines_sphere&quot;&gt;this&lt;/a&gt; Three.js example by changing the colors and the number of triangles based on my variables:&lt;/p&gt;
+&lt;p&gt;&lt;video class=&quot;rounded&quot; preload=&quot;none&quot; autoPlay playsInline muted loop width=&quot;1320&quot; height=&quot;1320&quot; poster=&quot;/images/engineering/veera-intern-blog-week-3/fireworks.png&quot;&gt;&lt;source type=&quot;video/mp4&quot; src=&quot;/images/engineering/veera-intern-blog-week-3/testing_lines.mp4&quot;&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&quot;first-steps-with-shaders&quot;&gt;First steps with shaders&lt;/h2&gt;
+&lt;p&gt;In addition to this, I had an exciting shader workshop with Nikolai. I have previously used some vertex and fragment shaders in &lt;a href=&quot;https://openframeworks.cc/ofBook/chapters/shaders.html&quot;&gt;openFrameworks&lt;/a&gt;. There, shaders live as separate files and are loaded when the app compiles. However, we first focused on understanding how to make GLSL, ie. the language of shaders, communicate with Javascript in a web app.&lt;/p&gt;
+&lt;p&gt;As an example, we inspected the shader code Nikolai had written for the background on the MAD website. The goal for me was to understand how to get fictional variables data1, data2 and data3 to have an effect on both the shader AND the Three.js side of a visual. For example, the color and pattern of the shader could be affected by the sentiment values of the Twitter account and the size of the 3D shapes by something else.&lt;/p&gt;
+&lt;p&gt;In practice, shader outputs can be controlled by using uniforms. They are global shader variables that can be updated in the &lt;code&gt;animate()&lt;/code&gt; function on Javascript side, for example.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-3/shader_tuple_drawing.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-3/shader_tuple_drawing.png 512w,/media/1024/images/engineering/veera-intern-blog-week-3/shader_tuple_drawing.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-3/shader_tuple_drawing.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-3/shader_tuple_drawing.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-3/shader_tuple_drawing.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A gradient shader with some Tuple drawings about noise&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;We had fun tweaking colors and the amount of noise and graininess. With shaders, it is easy to get rewarding results by accident. However, I wanted to understand them better in order to actually control the visuals.&lt;/p&gt;
+&lt;p&gt;We also discussed the balance between making a data-based, abstract artwork and a visual that strictly represents data (each shape is of accurate size etc.). I’m after a result that is somewhat in between. We discussed that one can illustrate the character of a text via colors, patterns, animation speeds and so on – the result is an interpretation.&lt;/p&gt;
+&lt;p&gt;I will study these two shader resources before the next weeks&amp;#39; session:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://thebookofshaders.com/&quot;&gt;The Book of Shaders&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html&quot;&gt;WebGLFundametals&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-3</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 2: Refining the MVP</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-2</link>
+				<pubDate>Mon, 12 Apr 2021 14:13:01 GMT</pubDate>
+				<description>&lt;p&gt;&lt;a href=&quot;https://mad.ac/engineering/blog/veera-intern-blog-week-1&quot;&gt;Week 1: Intern&amp;#39;s Greetings!&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Last week I was able to build a simple Flask template with some NLP functions and a separate Three.js scene. This week I wanted to explore the possibilities further. What kind of visuals would be realistic with Twitter data and this setup?&lt;/p&gt;
+&lt;h2 id=&quot;looking-into-custom-meshes&quot;&gt;Looking into custom meshes&lt;/h2&gt;
+&lt;p&gt;Firstly, I spent time studying Three.js resources. Three.js is known for its rich collection of &lt;a href=&quot;https://threejs.org/examples/&quot;&gt;examples&lt;/a&gt;, but its &lt;a href=&quot;https://threejs.org/docs/&quot;&gt;documentation&lt;/a&gt; can be hard to navigate when looking for specific methods. Luckily there are amazing additional resources, like &lt;a href=&quot;https://discoverthreejs.com&quot;&gt;DiscoverThreeJs&lt;/a&gt; by &lt;strong&gt;Lewy Blue&lt;/strong&gt; and a collective effort &lt;a href=&quot;https://threejsfundamentals.org/&quot;&gt;Three.js Fundamentals&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Having mostly studied generative visuals with openFrameworks and Processing, Three.js included quite a steep learning curve. One can render a simple cube or sphere very quickly with 3D primitives, but customising things requires more effort.&lt;/p&gt;
+&lt;p&gt;In Three.js, one can build a 3D sphere with these both:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;new THREE.SphereGeometry();
+new THREE.BufferGeometry();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After studying the resources and chatting with &lt;strong&gt;Nikolai&lt;/strong&gt;, it became clear that both are worth exploring in my project. I already know that I want to deform 3D shapes and change their surfaces based on data.&lt;/p&gt;
+&lt;p&gt;In my Flask app, I was able to scale and rotate a &lt;a href=&quot;https://threejs.org/docs/#api/en/geometries/SphereGeometry&quot;&gt;THREE.SphereGeometry&lt;/a&gt; based on NLP values. However, it became clear that in order to efficiently deform a sphere with a large amount of vertices once per frame, I would need a vertex shader.&lt;/p&gt;
+&lt;p&gt;With a &lt;a href=&quot;https://threejs.org/docs/index.html#api/en/core/BufferGeometry&quot;&gt;BufferGeometry&lt;/a&gt;, on the other hand, one can create any geometry that can be built with triangles, but one needs to define vertex positions in order to make a DIY mesh. I didn&amp;#39;t have time to explore this option yet, but I&amp;#39;ll do that later.&lt;/p&gt;
+&lt;h2 id=&quot;time-for-mockups&quot;&gt;Time for mockups&lt;/h2&gt;
+&lt;p&gt;Before diving deeper into meshes, it felt like a good time to work on some mockups. For example, I had not decided yet if I wanted to treat each Twitter account as one text corpus or as separate tweets. This will have a crucial effect on the visual: will it be a space with a few objects, each representing one trait in the whole corpus, or a big bunch of small shapes, each representing one tweet?&lt;/p&gt;
+&lt;p&gt;I made very simple mockups in Figma, exploring all the possible directions. I would want the MVP to have a very minimal design, with just a field where one can type a Twitter username or Twitter URL and then get a visual beside it.&lt;/p&gt;
+&lt;p&gt;To illustrate the vibe of the 3D scene, I took some screenshots of Three.js examples to show my colleagues what the library can do:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-2/figma1.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-2/figma1.png 512w,/media/1024/images/engineering/veera-intern-blog-week-2/figma1.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-2/figma1.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-2/figma1.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-2/figma1.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A Figma mockup of the MVP with a screenshot of Three.js example, vol 1&quot; /&gt;
+&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-2/figma2.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-2/figma2.png 512w,/media/1024/images/engineering/veera-intern-blog-week-2/figma2.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-2/figma2.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-2/figma2.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-2/figma2.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A Figma mockup of the MVP with a screenshot of Three.js example, vol 2&quot; /&gt;
+&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-2/figma3.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-2/figma3.png 512w,/media/1024/images/engineering/veera-intern-blog-week-2/figma3.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-2/figma3.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-2/figma3.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-2/figma3.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A Figma mockup of the MVP with a screenshot of Three.js example, vol 3&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;I shared the mockups with the team and I’m looking forward to getting their feedback. I’m interested in hearing what solutions they find visually interesting and what aspects (sentiment, most common words etc.) they would want to learn about their own Twitter accounts.&lt;/p&gt;
+&lt;p&gt;Finally I made a small NLP test that proved that Python was the right choice for this project. With &lt;a href=&quot;https://www.tweepy.org/&quot;&gt;Tweepy API&lt;/a&gt; and &lt;a href=&quot;https://textblob.readthedocs.io/en/dev/index.html&quot;&gt;TextBlob&lt;/a&gt;, I was able to access a chosen Twitter account and append the sentiment values to a list with relatively few lines of code!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;# creating empty list for the results
+twitterResultsList = []
+
+for tweet in posts[:199]:
+  # cleaning each tweet first
+  cleanedText = cleanTxt(tweet.full_text)
+  # making TextBlob of each cleaned tweet
+  tweet_text_sample = TextBlob(cleanedText)
+  subjectivity = tweet_text_sample.sentiment.subjectivity
+  polarity = tweet_text_sample.sentiment.polarity
+  tweetresults = (subjectivity, polarity)
+  # store each result in the list, each result pair
+  # can be used to transform one small cube
+  twitterResultsList.append(tweetresults)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-2</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Veera's Internship, Week 1: Intern's Greetings!</title>
+				<link>https://mad.ac/engineering/blog/veera-intern-blog-week-1</link>
+				<pubDate>Wed, 07 Apr 2021 16:03:01 GMT</pubDate>
+				<description>&lt;p&gt;How to visualize a crowded mind that results from extensive screen time?&lt;/p&gt;
+&lt;p&gt;That was my first task as an intern at MAD, and not a simple one. The visualization brief was partly created by myself and partly inspired by ideas of my MAD colleagues. For the next three months it will form the basis for my own software project, including a research phase, conceptualisation phase and execution phase. Throughout the project I will engage in ideation, UI/UX, design, system architecture and development alike. This blog follows the project step-by-step, starting from February.&lt;/p&gt;
+&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+&lt;p&gt;When I started the internship, there was already an interest in alternative ways for visualizing browser history at MAD. I, on the other hand, have my background in feature writing. As a creative coder I&amp;#39;m especially excited about artistic applications of deep learning. In the project, it started to feel natural to focus on online texts that we consume daily. The goal is to make a visual representation of that experience, with the help of machine learning.&lt;/p&gt;
+&lt;p&gt;When it comes to data visualization, I find &lt;strong&gt;Marcin Ignac&lt;/strong&gt;’s approach interesting. Besides leading the studio &lt;em&gt;Variable&lt;/em&gt;, he has explored algorithmic identities and metadata in his &lt;a href=&quot;https://variable.io/you-are-io/&quot;&gt;own artworks&lt;/a&gt;. Here, numeral data is translated into 3D space. This approach with data and space resonated with me, as during the pandemic we consume online contents while being confined to our homes. Our headspace increasingly reflects the online space where we spend our days.&lt;/p&gt;
+&lt;p&gt;During the last week’s ideation phase, I came up with an idea of textual data as a room with clutter and furniture. &lt;strong&gt;Rem Koolhaas&lt;/strong&gt; talks about &lt;a href=&quot;http://maurann.com/assets/readings/koolhaas-rem_junkspace.pdf&quot;&gt;junkspace&lt;/a&gt;, referring to flashy and unmemorable chunks of modern architecture that will be left behind on Earth. Would our browser history or Twitter habits reveal similar kind of junkspace if we dared to take a look?&lt;/p&gt;
+&lt;h2 id=&quot;mvp&quot;&gt;MVP&lt;/h2&gt;
+&lt;p&gt;These ideas are broad, so it became necessary to define an MVP. After talking with others, I decided that my first goal would be a simple web app that is able to process text data with some NLP libraries and then manipulate 3D primitives based on the result. In practice, this could mean that the number of negative tweets from user X is visualized with a red sphere, its size reflecting the amount of tweets. Later on I could get more ambitious with the 3D objects and data sources (like browser history). One option is to reflect the idea of public and private spaces in the visuals: maybe Twitter visuals could live as sculptures and trees in a park and browser data visuals in a more private setting of a room with furniture and plants.&lt;/p&gt;
+&lt;p&gt;For NLP, I wanted to dive into Python libraries. Node.js has handy packages like &lt;a href=&quot;https://www.npmjs.com/package/natural&quot;&gt;Natural&lt;/a&gt;, but Python’s selection of libraries is simply more diverse and able to handle large corpuses of text with a breeze. Additionally, I’m more experienced with Node.js than Python’s web frameworks Django and Flask so this felt like a good opportunity to learn new things with Python.&lt;/p&gt;
+&lt;p&gt;After talking with my developer colleague &lt;a href=&quot;https://mad.ac/team/nikolai&quot;&gt;Nikolai&lt;/a&gt;, we concluded that the best approach is to first build a simple Flask app that communicates with &lt;a href=&quot;https://threejs.org/&quot;&gt;Three.js&lt;/a&gt;front end. As my first experiment, I built a simple app that analyzes user input with an NLP library &lt;a href=&quot;https://textblob.readthedocs.io/en/dev/index.html&quot;&gt;textBlob&lt;/a&gt;. With a few lines of code, the NLP library outputs the subjectivity and polarity of the user input (sentiment), then the polarity separately and finally the number of times a certain word (“UK”) is mentioned.&lt;/p&gt;
+&lt;p&gt;I also added a simple 3D scene based on a Three.js &lt;a href=&quot;https://threejs.org/docs/#manual/en/introduction/Creating-a-scene&quot;&gt;tutorial&lt;/a&gt;. The NLP results are not affecting the 3D visual yet, but they now exist happily in the same Flask app for the next week!&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/veera-intern-blog-week-1/basic_flask_cube.png&quot; srcset=&quot;/media/512/images/engineering/veera-intern-blog-week-1/basic_flask_cube.png 512w,/media/1024/images/engineering/veera-intern-blog-week-1/basic_flask_cube.png 1024w,/media/2048/images/engineering/veera-intern-blog-week-1/basic_flask_cube.png 2048w,/media/3072/images/engineering/veera-intern-blog-week-1/basic_flask_cube.png 3072w,/media/4096/images/engineering/veera-intern-blog-week-1/basic_flask_cube.png 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A skeleton Flask app with a Three.js scene&quot; /&gt;&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/veera-intern-blog-week-1</guid>
+				<author>Veera Jussila</author>
+			</item>
+			<item>
+				<title>Granular Rendering with Custom Elements</title>
+				<link>https://mad.ac/engineering/blog/granular-rendering-custom-elements</link>
+				<pubDate>Tue, 02 Mar 2021 10:39:17 GMT</pubDate>
+				<description>&lt;p&gt;Modern frontend rendering best-practices come at a cost. Here is a sketch of a typical &amp;quot;isomorphic&amp;quot; rendering setup with &lt;a href=&quot;https://preactjs.com/&quot;&gt;Preact&lt;/a&gt;. We render our &lt;code&gt;&amp;lt;App /&amp;gt;&lt;/code&gt; component on the server and pass the generated HTML along with the data used to generate it to the client.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;// server.jsx
+import { h } from &amp;quot;preact&amp;quot;;
+import render from &amp;quot;preact-render-to-string&amp;quot;;
+import express from &amp;quot;express&amp;quot;;
+import { App } from &amp;quot;./app&amp;quot;;
+
+const server = express();
+
+server.get(&amp;quot;*&amp;quot;, (req, res) =&amp;gt; {
+  const props = {
+    /* ...data loaded from somewhere... */
+  };
+  const html = render(&amp;lt;App {...props} /&amp;gt;);
+  res.send(`&amp;lt;!DOCTYPE html&amp;gt;
+    &amp;lt;html&amp;gt;
+      &amp;lt;body&amp;gt;
+        &amp;lt;div id=&amp;quot;root&amp;quot;&amp;gt;
+          ${html}
+        &amp;lt;/div&amp;gt;
+        &amp;lt;script id=&amp;quot;__DATA__&amp;quot; type=&amp;quot;application/json&amp;quot;&amp;gt;
+          ${JSON.stringify(props)}
+        &amp;lt;/script&amp;gt;
+      &amp;lt;/body&amp;gt;
+    &amp;lt;/html&amp;gt;
+  `);
+});
+
+server.listen(8080);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And then, on the client, we use that data to &amp;quot;hydrate&amp;quot; our VDOM tree.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;// client.jsx
+import { h, hydrate } from &amp;quot;preact&amp;quot;;
+import { App } from &amp;quot;./app&amp;quot;;
+
+const props = JSON.parse(__DATA__.textContent);
+hydrate(&amp;lt;App {...props} /&amp;gt;, root);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This architecture is really nice, as it is simple to think about and allows us to share most of our code between client and server. Popular frameworks like &lt;a href=&quot;https://nextjs.org/&quot;&gt;Next.js&lt;/a&gt; and &lt;a href=&quot;https://www.gatsbyjs.com/&quot;&gt;Gatsby&lt;/a&gt; implement it.&lt;/p&gt;
+&lt;p&gt;But herein lies the cost: We&amp;#39;re sending all content to the client twice, once as HTML and then again as JSON. Furthermore, our page only becomes interactive when we&amp;#39;re done &lt;a href=&quot;https://reactjs.org/docs/react-dom.html#hydrate&quot;&gt;hydrating&lt;/a&gt; it, and hydrating blocks the main thread—possibly for a while if our app is big or the user doesn&amp;#39;t have a powerful CPU. Worse, in the general case, large parts of the tree that we&amp;#39;re hydrating are static and don&amp;#39;t update in response to state changes, meaning we wasted cycles hydrating them in the first place. &lt;a href=&quot;https://developers.google.com/web/updates/2019/02/rendering-on-the-web&quot;&gt;&amp;quot;Rendering on the Web&amp;quot;&lt;/a&gt; is a good discussion of the tradeoffs involved.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://twitter.com/_developit&quot;&gt;Jason Miller&lt;/a&gt; outlines a possible alternative in &lt;a href=&quot;https://jasonformat.com/islands-architecture/&quot;&gt;&amp;quot;Islands Architecture&amp;quot;&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The general idea of an “Islands” architecture is deceptively simple: render HTML pages on the server, and inject placeholders or slots around highly dynamic regions. These placeholders/slots contain the server-rendered HTML output from their corresponding widget. They denote regions that can then be &amp;quot;hydrated&amp;quot; on the client into small self-contained widgets, reusing their server-rendered initial HTML.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I want to write about one way to implement this architecture using Preact and &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements&quot;&gt;Custom Elements&lt;/a&gt; that we&amp;#39;re using on the new MAD website. Custom Elements and &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/Web_Components&quot;&gt;Web Components&lt;/a&gt;, the collection of standards that Custom Elements are a part of, together with Shadow DOM and HTML templates, have received their share of &lt;a href=&quot;https://dev.to/richharris/why-i-don-t-use-web-components-2cia&quot;&gt;criticism&lt;/a&gt; for being an inadequate replacement for modern frontend frameworks such as React or Vue.&lt;/p&gt;
+&lt;p&gt;In my mind, their strength lies not in replacing modern frameworks, but in augmenting them. Frameworks give us a component model and rendering, while Custom Elements allow us to &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#using_the_lifecycle_callbacks&quot;&gt;hook into&lt;/a&gt; the browser&amp;#39;s standard element lifecycle using &lt;code&gt;connectedCallback()&lt;/code&gt; and &lt;code&gt;disconnectedCallback()&lt;/code&gt;. This allows us to run code in response to a piece of HTML showing up or being removed from the page—exactly what we need for granular rendering.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s walk through some examples of how we use this pattern on the new MAD website.&lt;/p&gt;
+&lt;p&gt;The simplest example is one where we don&amp;#39;t use any Preact at all on the client: the lazy-image element. On the server, we wrap our &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; in a &lt;code&gt;&amp;lt;lazy-image&amp;gt;&lt;/code&gt;, pass a transparent placeholder as the &lt;code&gt;src&lt;/code&gt;, with the real &lt;code&gt;src&lt;/code&gt; and &lt;code&gt;srcset&lt;/code&gt; tucked away in dataset attributes.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;&amp;lt;lazy-image&amp;gt;
+  &amp;lt;img
+    src=&amp;quot;data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&amp;quot;
+    data-src=&amp;quot;/media/1024/images/example.jpg&amp;quot;
+    data-srcset=&amp;quot;
+      /media/512/images/example.jpg 512w,
+      /media/1024/images/example.jpg 1024w,
+      /media/2048/images/example.jpg 2048w,
+      /media/3072/images/example.jpg 3072w,
+      /media/4096/images/example.jpg 4096w
+    &amp;quot;
+    alt=&amp;quot;An example image&amp;quot;
+  /&amp;gt;
+&amp;lt;/lazy-image&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And then, on the client, we attach an &lt;code&gt;IntersectionObserver&lt;/code&gt; and switch in the real image when the element comes near the viewport.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;const observer = new IntersectionObserver(
+  (entries) =&amp;gt; {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        observer.unobserve(entry.target);
+        entry.target.load();
+      }
+    }
+  },
+  { rootMargin: &amp;quot;200px&amp;quot; }
+);
+
+export class LazyImage extends HTMLElement {
+  connectedCallback() {
+    observer.observe(this);
+  }
+
+  disconnectedCallback() {
+    observer.unobserve(this);
+  }
+
+  load() {
+    const image = this.querySelector(&amp;quot;img&amp;quot;);
+
+    if (image) {
+      if (image.dataset.srcset) {
+        image.srcset = image.dataset.srcset;
+        delete image.dataset.srcset;
+      }
+
+      if (image.dataset.src) {
+        image.src = image.dataset.src;
+        delete image.dataset.src;
+      }
+    }
+  }
+}
+
+customElements.define(&amp;quot;lazy-image&amp;quot;, LazyImage);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, this level of interactivity doesn&amp;#39;t require hydrating a whole VDOM tree. We have a similar element for lazily loading videos and starting playback when they&amp;#39;re in the viewport.&lt;/p&gt;
+&lt;p&gt;This simple example shows off one of the best things about this approach: the HTML is in control of where elements are instantiated, rather than the other way around, where a piece of JavaScript uses &lt;code&gt;querySelectorAll&lt;/code&gt; or &lt;code&gt;MutationObserver&lt;/code&gt; to find chunks of HTML to make interactive.&lt;/p&gt;
+&lt;p&gt;Our favourite element of this kind is &lt;code&gt;&amp;lt;draggable-element&amp;gt;&lt;/code&gt;, which you can wrap around any element to make it draggable, and which you can see in its full glory on the home page.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;&amp;lt;draggable-element id=&amp;quot;applet-map&amp;quot;&amp;gt;
+  &amp;lt;MapApplet /&amp;gt;
+&amp;lt;/draggable-element&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;#39;s look at an example that uses Preact on the client next, specifically the &amp;quot;Notes&amp;quot; applet on the home page.&lt;/p&gt;
+&lt;p&gt;On the server we include the data that the component needs for its initial render in a &lt;code&gt;&amp;lt;script type=&amp;quot;application/json&amp;quot;&amp;gt;&lt;/code&gt; tag.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;&amp;lt;mad-notes&amp;gt;
+  &amp;lt;NotesApplet {...props} /&amp;gt;
+  &amp;lt;script type=&amp;quot;application/json&amp;quot; dangerouslySetInnerHTML={{ __html: JSON.stringify(props) }} /&amp;gt;
+&amp;lt;/mad-notes&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And on the client we hydrate the component with that data.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;import { h, hydrate } from &amp;quot;preact&amp;quot;;
+import { NotesApplet } from &amp;quot;../applets/notes&amp;quot;;
+
+class NotesElement extends HTMLElement {
+  connectedCallback() {
+    const props = JSON.parse(this.querySelector(&amp;quot;script&amp;quot;).textContent);
+    hydrate(&amp;lt;NotesApplet {...props} /&amp;gt;, this);
+  }
+}
+
+customElements.define(&amp;quot;mad-notes&amp;quot;, NotesElement);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And voila, our &lt;code&gt;&amp;lt;NotesApplet /&amp;gt;&lt;/code&gt; is now interactive.&lt;/p&gt;
+&lt;p&gt;This pattern becomes quite repetitive when you have more than a couple of elements, but you could wrap this up in a helper or use a library like &lt;a href=&quot;https://github.com/preactjs/preact-custom-element&quot;&gt;preact-custom-element&lt;/a&gt;, which also adds a few more niceties, such as observing element attributes and syncing them with Preact component props, and optionally rendering into shadow DOM.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;import register from &amp;quot;preact-custom-element&amp;quot;;
+import { RemindersApplet } from &amp;quot;../applets/reminders&amp;quot;;
+
+register(RemindersApplet, &amp;quot;mad-reminders&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can do better, though.&lt;/p&gt;
+&lt;p&gt;While this approach allows us to only hydrate portions of the page which should be interactive, it hydrates all of them at the same time, on page load. Meanwhile, most elements are probably off-screen, and we want to prioritise those that the user will likely interact with first.&lt;/p&gt;
+&lt;p&gt;We can use an &lt;code&gt;IntersectionObserver&lt;/code&gt; and a dynamic import to fetch the module and hydrate the component when its wrapping element comes close to the viewport.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-jsx&quot;&gt;import { h, hydrate } from &amp;quot;preact&amp;quot;;
+
+const observer = new IntersectionObserver(
+  (entries) =&amp;gt; {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        oberver.unobserve(entry.target);
+        entry.target.hydrate();
+      }
+    }
+  },
+  { rootMargin: &amp;quot;200px&amp;quot; }
+);
+
+class NotesElement extends HTMLElement {
+  connectedCallback() {
+    observer.observe(this);
+  }
+
+  disconnectedCallback() {
+    observer.unobserve(this);
+  }
+
+  async hydrate() {
+    const { NotesApplet } = await import(&amp;quot;../applets/notes&amp;quot;);
+    const props = JSON.parse(this.querySelector(&amp;quot;script&amp;quot;).textContent);
+    hydrate(&amp;lt;NotesApplet {...props} /&amp;gt;, this);
+  }
+}
+
+customElements.define(&amp;quot;mad-notes&amp;quot;, NotesElement);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, we only need to load a minimal amount of JavaScript in the initial bundle, and can then load the rest of it and perform hydration when it makes sense to. Depending on your situation, you could think of other approaches for triggering hydration, such as scroll listeners or &lt;code&gt;mouseover&lt;/code&gt; or &lt;code&gt;touchstart&lt;/code&gt; events.&lt;/p&gt;
+&lt;p&gt;You could also abstract this behaviour into a general-purpose element that can hydrate any of your Preact components, or pair this approach with a Service Worker that pre-emptively loads the code for components that are likely to be needed soon after page load, so that they&amp;#39;re already available when the time comes to hydrate them.&lt;/p&gt;
+&lt;p&gt;And that&amp;#39;s it! Please reach out on &lt;a href=&quot;https://twitter.com/nonscio&quot;&gt;Twitter&lt;/a&gt; if you have questions or suggestions. Also, we&amp;#39;re hiring! Check out our &lt;a href=&quot;/careers&quot;&gt;careers&lt;/a&gt; page for open positions.&lt;/p&gt;
+&lt;br&gt;
+
+&lt;hr&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https://twitter.com/gryzzly&quot;&gt;Misha Reyzlin&lt;/a&gt; and &lt;a href=&quot;https://twitter.com/thabisegoe&quot;&gt;Rethabile Segoe&lt;/a&gt; for providing valuable feedback on early drafts of this article.&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/granular-rendering-custom-elements</guid>
+				<author>Nikolai Sivertsen</author>
+			</item>
+			<item>
+				<title>Tools for Remote Collaboration</title>
+				<link>https://mad.ac/engineering/blog/tools-remote-collaboration</link>
+				<pubDate>Mon, 01 Mar 2021 10:39:17 GMT</pubDate>
+				<description>&lt;p&gt;We&amp;#39;re lucky to have tools available that have made collaborating from home for the last year much more bearable. There are the tools that everyone knows, such as Zoom, Slack, Notion and G Suite. They&amp;#39;re mostly fine, and we use them too, but I wanted to write about two tools that might be a little less well-known and that we&amp;#39;ve come to rely on.&lt;/p&gt;
+&lt;h2 id=&quot;tuple&quot;&gt;Tuple&lt;/h2&gt;
+&lt;p&gt;We do a fair bit of pair programming at MAD. Traditional screen-sharing tools don&amp;#39;t always make remote pair programming enjoyable, as there&amp;#39;s no way to quickly switch who&amp;#39;s in control of the keyboard, and latency often gets in the way of a train of thought.&lt;/p&gt;
+&lt;p&gt;Enter &lt;a href=&quot;http://tuple.app/&quot;&gt;Tuple&lt;/a&gt;, an app made specifically for remote pair programming. A native macOS app with a C++ WebRTC core, it feels more immediate than everything else out there. It also allows you to point at a location on the screen and even draw on it, which really helps with quickly communicating an idea.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/tools-remote-collaboration/tuple-pairing-session.jpg&quot; srcset=&quot;/media/512/images/engineering/tools-remote-collaboration/tuple-pairing-session.jpg 512w,/media/1024/images/engineering/tools-remote-collaboration/tuple-pairing-session.jpg 1024w,/media/2048/images/engineering/tools-remote-collaboration/tuple-pairing-session.jpg 2048w,/media/3072/images/engineering/tools-remote-collaboration/tuple-pairing-session.jpg 3072w,/media/4096/images/engineering/tools-remote-collaboration/tuple-pairing-session.jpg 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;A Tuple pairing session&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s the closest thing to programming together at one desk that I&amp;#39;ve seen.&lt;/p&gt;
+&lt;p&gt;There are sometimes bugs, and we&amp;#39;ve been impatiently awaiting some upcoming features, such as improvements to &lt;a href=&quot;https://tuple.app/blog/three-player-improvements&quot;&gt;three-person pairing sessions&lt;/a&gt;, but those are actively being worked on and updates have been frequent. There&amp;#39;s also a &lt;a href=&quot;https://tuple.app/linux&quot;&gt;Linux client&lt;/a&gt; in the works.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s rare that a day goes by without a Tuple session, which says a lot, I think.&lt;/p&gt;
+&lt;h2 id=&quot;tailscale&quot;&gt;Tailscale&lt;/h2&gt;
+&lt;p&gt;Having designers and engineers sit together at one screen to go over the finer details of an interface, or to do some live prototyping, is instrumental to our process. It&amp;#39;s where we find ideas and improvements that can&amp;#39;t be found any other way: Obsessively resizing the viewport, clicking on elements again and again, zooming in and out, screen-recording animations to pore over them in slow motion. Screen sharing doesn&amp;#39;t cut it in this case, as glitches and latency come in the way of the pixel- and millisecond-level precision that is necessary for this process.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://tailscale.com/&quot;&gt;Tailscale&lt;/a&gt; is a zero-config VPN that, among other things, allows you to share your localhost with team members anywhere in the world. After installing the app and authenticating via an existing identity provider, such as G Suite, Okta, Active Directory, you&amp;#39;re assigned a stable IP address that is only accessible to people on your team.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/tools-remote-collaboration/tailscale-menu-bar.jpg&quot; srcset=&quot;/media/512/images/engineering/tools-remote-collaboration/tailscale-menu-bar.jpg 512w,/media/1024/images/engineering/tools-remote-collaboration/tailscale-menu-bar.jpg 1024w,/media/2048/images/engineering/tools-remote-collaboration/tailscale-menu-bar.jpg 2048w,/media/3072/images/engineering/tools-remote-collaboration/tailscale-menu-bar.jpg 3072w,/media/4096/images/engineering/tools-remote-collaboration/tailscale-menu-bar.jpg 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Tailscale macOS menu bar app&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;This means that, when working together, saving a file is enough to update the website in a team member&amp;#39;s browser. No waiting for staging deployments or sending files around.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&quot;lazy&quot; src=&quot;/media/1024/images/engineering/tools-remote-collaboration/tailscale-mad-website.jpg&quot; srcset=&quot;/media/512/images/engineering/tools-remote-collaboration/tailscale-mad-website.jpg 512w,/media/1024/images/engineering/tools-remote-collaboration/tailscale-mad-website.jpg 1024w,/media/2048/images/engineering/tools-remote-collaboration/tailscale-mad-website.jpg 2048w,/media/3072/images/engineering/tools-remote-collaboration/tailscale-mad-website.jpg 3072w,/media/4096/images/engineering/tools-remote-collaboration/tailscale-mad-website.jpg 4096w&quot; sizes=&quot;(min-width: 1660px) 1100px, (min-width: 1000px) calc(100vw - 560px), 100vw&quot; alt=&quot;Sharing localhost with Tailscale&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Tailscale is built on top of the &lt;a href=&quot;https://www.wireguard.com/&quot;&gt;Wireguard&lt;/a&gt; protocol, which is a faster and simpler alternative to IPsec created by Jason A. Donenfeld. Wireguard provides the data plane while Tailscale acts as a controller and handles public keys, adding and removing devices from your network, and so on.&lt;/p&gt;
+&lt;p&gt;Tailscale is capable of much more than sharing your localhost. You can &lt;a href=&quot;https://tailscale.com/kb/1077/secure-server-ubuntu-18-04&quot;&gt;install it&lt;/a&gt; on your Linux servers and share internal services without exposing them to the open internet. David Crawshaw, one of Tailscale&amp;#39;s co-founders, describes the motivation beautifully in &lt;a href=&quot;https://crawshaw.io/blog/remembering-the-lan&quot;&gt;&amp;quot;Remembering the LAN&amp;quot;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Together, these two tools have given back to us some of the immediacy of face-to-face interaction that we used to take for granted. Give them a spin.&lt;/p&gt;
+&lt;hr&gt;
+</description>
+				<guid>https://mad.ac/engineering/tools-remote-collaboration</guid>
+				<author>Nikolai Sivertsen</author>
+			</item></channel></rss>
